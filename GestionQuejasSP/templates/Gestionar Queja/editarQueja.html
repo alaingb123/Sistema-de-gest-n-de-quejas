@@ -1,0 +1,431 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- CSS de Datepicker -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+<!-- JavaScript de Datepicker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script>
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+<meta name="generator" content="Hugo 0.111.3">
+<title>Checkout example · Bootstrap v5.3</title>
+
+<link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/checkout/">
+
+
+<link href="{% static  'css/editar.css' %}" rel="stylesheet">
+
+<style>
+    .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+    }
+
+    @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+            font-size: 3.5rem;
+        }
+    }
+
+    .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+
+    .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+    }
+
+    .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+    }
+
+    .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+    }
+
+    .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+
+
+    .bd-mode-toggle {
+        z-index: 1500;
+    }
+</style>
+
+
+<!-- Custom styles for this template -->
+<link href="checkout.css" rel="stylesheet">
+
+
+
+<div class="container" >
+
+    <div class="py-5 text-center" >
+        <img class="d-block mx-auto mb-4" src="{% static 'Autenticacion/login/img/S.png' %}" alt="" width="200" height="150"
+             height="80">
+        <h2  style="color: #1e1f22">Editar queja</h2>
+    </div>
+
+
+    <div class="col-md-10 col-lg-8" style="position: absolute; left:17%">
+
+
+        <!-- Formulario -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+
+
+             <div class="row">
+    <div class="col-sm-6 mb-3">
+      <label for="nombre_apellidos" class="form-label" style="color: #1e1f22">Nombre y apellidos</label>
+       <input type="text" class="form-control" id="nombre_apellidos" name="nombre_apellidos" style="background-color: white;color: #1e1f22;border-radius: 0"
+      value="{{ form.nombre_apellidos.value }}" required>
+        <div class="invalid-feedback">
+        Por favor introduzca su nombre y apellido.
+      </div>
+    </div>
+    <div class="col-sm-6 mb-3">
+       <label for="entidadAfectada" class="form-label"  style="color: #1e1f22">Entidad afectada</label>
+      <select name="entidadAfectada" required   id="id_entidadAfectada" class="form-select" style="background-color: white;color: #1e1f22;border-radius: 0">
+          <option value="">Elegir...</option>
+{% for pipi in entidades %}
+        <option value={{ pipi.id }} {% if form.entidadAfectada.value == pipi.id %}selected{% endif %}>{{ pipi.nombre }}</option>
+{% endfor %}
+</select>
+      <div class="invalid-feedback" >
+        Por favor seleccione un dato válido.
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-6 mb-3">
+      <label for="modalidad" class="form-label"  style="color: #1e1f22">Modalidad</label>
+      <select class="form-select" id="modalidad" name="modalidad" required style="background-color: white;color: #1e1f22;border-radius: 0">
+        <option value="">Elegir...</option>
+ {% for pipi in modalidad %}
+        <option value={{ pipi.id }} {% if form.modalidad.value == pipi.id %}selected{% endif %}>{{ pipi.nombre }}</option>
+{% endfor %}
+      </select>
+      <div class="invalid-feedback" style="color: background: linear-gradient(to right, #065ffa, #c61010)">
+        Por favor seleccione un dato válido.
+      </div>
+    </div>
+    <div class="col-sm-6 mb-3">
+      <label for="via" class="form-label"  style="color: #1e1f22">Via</label>
+      <select class="form-select" id="via" name="via" required style="background-color: white;color: #1e1f22;border-radius: 0">
+        <option value="">Elegir...</option>
+    {% for pipi in via %}
+        <option value={{ pipi.id }} {% if form.via.value == pipi.id %}selected{% endif %}>{{ pipi.nombre }}</option>
+{% endfor %}
+      </select>
+      <div class="invalid-feedback" style="color: background: linear-gradient(to right, #065ffa, #c61010)">
+        Por favor seleccione un dato válido.
+      </div>
+    </div>
+    <div class="col-12 col-lg-6 mb-3">
+      <label for="procedencia" class="form-label"  style="color: #1e1f22">Procedencia</label>
+      <select class="form-select" id="procedencia" name="procedencia" required style="background-color: white;color: #1e1f22;border-radius: 0">
+        <option value="">Elegir...</option>
+         {% for pipi in procedencia %}
+        <option value={{ pipi.id }} {% if form.procedencia.value == pipi.id %}selected{% endif %}>{{ pipi.nombre }}</option>
+{% endfor %}
+      </select>
+      <div class="invalid-feedback" style="color: background: linear-gradient(to right, #065ffa, #c61010)">
+        Por favor seleccione un dato válido.
+      </div>
+    </div>
+    <div class="col-sm-6 mb-3">
+      <label for="clasificacion" class="form-label"  style="color: #1e1f22">Clasificación</label>
+      <select class="form-select" id="clasificacion" name="clasificacion" required style="background-color: white;color: #1e1f22;border-radius: 0">
+        <option value="">Elegir...</option>
+       {% for pipi in clasificacion %}
+        <option value={{ pipi.id }} {% if form.clasificacion.value == pipi.id %}selected{% endif %}>{{ pipi.nombre }}</option>
+{% endfor %}
+      </select>
+      <div class="invalid-feedback" style="color: background: linear-gradient(to right, #065ffa, #008bff)">
+        Por favor seleccione un dato válido.
+      </div>
+    </div>
+    <div class="col-12 col-lg-6 mb-3">
+      <label for="casoPrensa" class="form-label"  style="color: #1e1f22">Caso Prensa</label>
+      <select class="form-select" id="casoPrensa" name="casoPrensa" required style="background-color: white;color: #1e1f22;border-radius: 0">
+        <option value="">Elegir...</option>
+      {% for pipi in casoPrensa %}
+        <option value={{ pipi.id }} {% if form.casoPrensa.value == pipi.id %}selected{% endif %}>{{ pipi.nombre }}</option>
+{% endfor %}
+      </select>
+      <div class="invalid-feedback" style="color: background: linear-gradient(to right, #065ffa, #008bff)">
+        Por favor seleccione un dato válido.
+      </div>
+    </div>
+    <div class="col-12 col-lg-6 mb-3">
+      <label for="fechaR" class="form-label"  style="color: #1e1f22">Fecha</label>
+      <input type="date" class="form-control" id="fechaR" name="fechaR" style="background-color: white;color: #1e1f22;border-radius: 0"
+
+     value="{{ queja.fechaR|date:'Y-m-d' }}" required>
+      <div class="invalid-feedback" style="color: background: linear-gradient(to right, #065ffa, #c61010)">
+        Por favor seleccione una fecha.
+      </div>
+
+
+
+
+  </div>
+   </div>
+           <div class="col-12 mb-3">
+      <label for="argumento" class="form-label"  style="color: #1e1f22">Descripción</label>
+      <textarea class="form-control" id="argumento" name="argumento" rows="3" style="height: 250px;background-color: white;color: #1e1f22;border-radius: 0" required>{{ queja.argumento }}</textarea>
+   <span id="error-argumento"  class="alert alert-danger" style="color: #db3545; display: none;">
+     La descripción debe comenzar con mayúscula.
+</span>
+
+    </div>
+        <div class="container">
+  <table style="margin: 0 auto;">
+    <tr>
+      <th style="color: #1e1f22">Documento:</th>
+      <td>
+        <div class="custom-file" style="background-color: #f3f8fc;">
+  <input type="file" name="documento" id="id_documento" class="custom-file-input" multiple style="background-color: white;color: #1e1f22;border-radius: 0;visibility: visible">
+  <label class="custom-file-label" for="id_documento" style="color: rgba(255,255,255,0.09);">
+    Seleccionar archivos
+  </label>
+  {% if queja.documentos %}
+    <p>Los documentos actuales son:</p>
+    <ul>
+      {% for documento in queja.documentos.all %}
+        <li>
+          <a href="{{ documento.archivo.url }}">{{ documento.archivo.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <span id="error-doc" class="alert alert-danger" style="color: #db3545; display: none;">Tamaño máximo: 14 Mb</span>
+</div>
+      </td>
+      <th style="color: #1e1f22">Asunto</th>
+      <td>
+        <div class="form-group">
+          <input type="text" name="asunto" maxlength="50" required="" value="{{ queja.asunto }}" {% if quejaU.asunto %} readonly {% endif %} id="id_asunto" class="form-control" style="background-color: white;color: #1e1f22;border-radius: 0">
+         <span id="error-asunto" class="alert alert-danger" style="color: #db3545; display: none;">Debe comenzar con mayúscula y no contener caracteres especiales.</span>
+
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th style="color: #1e1f22">Teléfono</th>
+      <td>
+        <div class="form-group" style="margin-right: 30px">
+          <input type="number" name="telefono" value="{% if queja.telefono %}{{ queja.telefono }}{% endif %}" id="id_telefono" class="form-control" style="background-color: white;color: #1e1f22;border-radius: 0">
+         <p id="contador-caracteres" class="text-white mt-2" style="color: #1e1f22; margin-top: 5px;"></p>
+        </div>
+      </td>
+      <th style="color: #1e1f22" >Dirección</th>
+      <td>
+        <div class="form-group">
+          <input type="text" name="direccion" maxlength="255" value="{{ queja.direccion }}" id="id_direccion" class="form-control" style="background-color: white;color: #1e1f22;border-radius: 0">
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+  <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 10vh">
+<div style="margin-top: 90px">
+    <button class="btn btn-primary btn-lg" type="submit" style="background-color: #549d27;border-color: #539d27;border-radius: 0;width: 200px;float:left;margin-right:10px;">
+     Guardar Cambios
+    </button>
+<a href="{% url 'dash' %}" class="btn btn-secondary mr-2" style="background-color: #444444;border-color:#444444 ;border-radius: 0;width: 200px;float:left; height: 48px;font-size: 1.25rem;">
+    Volver
+  </a>
+</div>
+  <div style="height: 60px;">
+      <span style="display: inline-block; width: 20px; height: 20px; background-color: transparent;"></span>
+  </div>
+</div>
+
+        <script>
+   const nombreApellidosInput = document.getElementById('nombre_apellidos');
+const nombreApellidosRegex = /^[A-Z][a-zñáéíóú]+\s([A-Z][a-zñáéíóú]+\s?)*$/;
+
+nombreApellidosInput.addEventListener('input', function(e) {
+  const value = e.target.value.trim();
+  if (!nombreApellidosRegex.test(value)) {
+    nombreApellidosInput.setCustomValidity('El nombre y los apellidos deben tener el formato correcto: la primera letra de cada palabra debe ser mayúscula y no deben contener números ni caracteres especiales. Debe contener el nombre y apellidos.');
+  } else {
+    nombreApellidosInput.setCustomValidity('');
+  }
+});
+
+const form = document.querySelector('form');
+form.addEventListener('submit', function(e) {
+  if (!form.checkValidity()) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  form.classList.add('was-validated');
+});
+
+// Agregar validación a todos los campos requeridos
+const requiredFields = form.querySelectorAll('[required]');
+requiredFields.forEach(function(field) {
+  field.addEventListener('invalid', function(e) {
+    e.preventDefault();
+    field.classList.add('is-invalid');
+  });
+  field.addEventListener('input', function(e) {
+    if (field.validity.valid) {
+      field.classList.remove('is-invalid');
+    }
+  });
+});
+
+// Agregar validación a los campos de selección
+const selectFields = form.querySelectorAll('select');
+selectFields.forEach(function(field) {
+  field.addEventListener('change', function(e) {
+    if (field.value) {
+      field.classList.remove('is-invalid');
+    } else {
+      field.classList.add('is-invalid');
+    }
+  });
+});
+
+var asuntoInput = document.getElementById('id_asunto');
+var errorAsunto = document.getElementById('error-asunto');
+
+asuntoInput.addEventListener('input', function() {
+    var input = this.value;
+    if (input.trim() === '') {
+        errorAsunto.style.display = 'none';
+        asuntoInput.setCustomValidity("");
+    } else {
+        var regex = /^[A-Z][a-zA-Z ]*$/; // Comienza con mayúscula y solo letras y espacios
+        var isValid = regex.test(input);
+
+        if (!isValid) {
+            errorAsunto.style.display = 'block';
+            asuntoInput.setCustomValidity("El asunto debe comenzar con mayúscula y no contener caracteres especiales.");
+        } else {
+            errorAsunto.style.display = 'none';
+            asuntoInput.setCustomValidity("");
+        }
+    }
+});
+
+
+var inputTelefono = document.getElementById('id_telefono');
+var contadorCaracteres = document.createElement('p');
+contadorCaracteres.style.color = 'white';
+contadorCaracteres.style.marginTop = '5px';
+
+inputTelefono.parentNode.appendChild(contadorCaracteres);
+
+inputTelefono.addEventListener('input', function() {
+    if (this.value.length > 8) {
+        this.value = this.value.slice(0, 8); // Limita el valor a 8 caracteres
+    }
+
+    contadorCaracteres.textContent = this.value.length + '/8'; // Muestra el contador de caracteres
+
+    if (this.value.length === 8) {
+        contadorCaracteres.style.color = ' #db3545'; // Cambia el color a rojo al alcanzar 8 caracteres
+    } else {
+        contadorCaracteres.style.color = 'white'; // Vuelve a color blanco si no se alcanza 8 caracteres
+    }
+});
+
+
+
+document.getElementById('argumento').addEventListener('input', function() {
+    let descripcion = this.value.trim(); // Obtener el valor del campo sin espacios en blanco al principio y al final
+
+    if (descripcion.length > 0 && descripcion[0] !== descripcion[0].toUpperCase()) {
+        document.getElementById('error-argumento').style.display = 'block';
+    } else {
+        document.getElementById('error-argumento').style.display = 'none';
+    }
+});
+
+</script>
+<script>
+ var fechaR = document.getElementById("fechaR");
+var today = new Date().toISOString().split('T')[0];
+fechaR.value = today;
+
+fechaR.addEventListener("input", function() {
+    var fechaSeleccionada = new Date(fechaR.value);
+    var fechaActual = new Date();
+    var errorFecha = document.getElementById('error-fecha');
+
+    if (fechaSeleccionada > fechaActual) {
+        fechaR.setCustomValidity("Por favor seleccione una fecha anterior o igual a la fecha actual.");
+        errorFecha.style.display = 'block'; // Mostrar el mensaje de error
+    } else {
+        fechaR.setCustomValidity("");
+        errorFecha.style.display = 'none'; // Ocultar el mensaje de error
+    }
+});
+
+var inputDocumento = document.getElementById('id_documento');
+var errorDoc = document.getElementById('error-doc');
+
+inputDocumento.addEventListener('change', function() {
+    var fileSize = this.files[0].size; // Tamaño del archivo en bytes
+    var maxSize = 14 * 1024 * 1024; // Tamaño máximo permitido: 14 MB
+
+    if (fileSize > maxSize) {
+        errorDoc.style.display = 'block'; // Mostrar mensaje de error
+    } else {
+        errorDoc.style.display = 'none'; // Ocultar mensaje de error
+    }
+});
+
+</script>
+
+        </form>
+
+    </div>
+
+</div>
+        {% endblock %}

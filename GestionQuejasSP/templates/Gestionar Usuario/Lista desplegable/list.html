@@ -1,0 +1,430 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{#<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">#}
+{#    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>#}
+{##}
+{#    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>#}
+
+
+    <style>
+    .bg-dark {
+    background-color: rgba(33, 37, 41, 0) !important;
+}
+#clas{
+    display: none;
+}
+#enti{
+    display: none;
+}
+#conc{
+    display: none;
+}
+#satis{
+    display: none;
+}
+#cp{
+    display: none;
+}
+#mods{
+    display: none;
+}
+#vi{
+    display: none;
+}
+#proce{
+    display: none;
+}
+
+
+      ul.menu {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            background-color: #f1f1f1;
+            overflow: hidden;
+        }
+
+        ul.menu li {
+            float: left;
+        }
+         ul.menu li a {
+            display: block;
+            color: #333;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        ul.menu li a:hover {
+            background-color: #ddd;
+        }
+    </style>
+  <div class="container">
+  <div class="row">
+    <div class="col-md-12 bg-dark text-white text-center py-3" >
+      <h1 >Administración de listas desplegables</h1>
+    </div>
+  </div>
+<ul class="menu" style=" background-image: linear-gradient(to left, rgba(84, 159, 39, 0.9), rgba(84, 159, 39, 0.75));;font-size: medium; text-align: center;">
+  <li><button type="button" class="btn btn-link text-white text-decoration-none" onclick="toggleTable('clas')" style="margin-left: 200px">Clasificaciones</button></li>
+  <li><button type="button" class="btn btn-link text-white text-decoration-none" onclick="toggleTable('enti_div')">Entidad Afectada</button></li>
+  <li><button type="button" class="btn btn-link text-white text-decoration-none" onclick="toggleTable('conc')">Conclusiones</button></li>
+  <li><button type="button" class="btn btn-link text-white text-decoration-none" onclick="toggleTable('satis')">Satisfaccion</button></li>
+  <li><button type="button" class="btn btn-link text-white text-decoration-none" onclick="toggleTable('cp')">Casos Prensa</button></li>
+  <li><button type="button" class="btn btn-link text-white text-decoration-none" onclick="toggleTable('mods')">Modalidades</button></li>
+  <li><button type="button" class="btn btn-link text-white text-decoration-none" onclick="toggleTable('vi')">Vias</button></li>
+  <li><button type="button" class="btn btn-link text-white text-decoration-none" onclick="toggleTable('proce')">Procedencia</button></li>
+</ul>
+
+
+
+<div id="clas" class="toggleable-table" style="display: none;">
+  <div class="row mt-4" style="color: #1e1f22">
+    <div class="col-md-6">
+
+      <table class="table" style="width: 1050px">
+      <h2>Clasificaciones</h2>
+        <thead style="color: #1e1f22">
+          <th style="color: #1e1f22">Nombre</th>
+          <th style="color: #1e1f22">Editar</th>
+          <th style="color: #1e1f22">Eliminar</th>
+        </thead>
+        <tbody>
+          {% for clasificacion in clasificaciones %}
+          <tr>
+            <td style="color: #1e1f22">{{ clasificacion.nombre }}</td>
+            <td style="color: #1e1f22"><a href="{% url 'edit'  pk=clasificacion.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-success" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">Editar</a></td>
+            <td style="color: #1e1f22"><a href="{% url 'delete' pk=clasificacion.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="width: 110px;height: 30px; background-color: #444444;border-color:#444444;border-radius: 0 ">Eliminar</a></td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td style="color: #1e1f22">No hay clasificaciones disponibles.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <button class="btn btn-primary" style="margin-bottom:20px;background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">
+        <a href="{% url 'clasificacion' %}" data-toggle="modal" data-target="#exampleModal" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">
+          <i class="fas fa-plus-circle mr-2"></i>
+          Nueva Clasificacion
+        </a>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="enti_div" class="toggleable-table" style="display: none;">
+  <div class="col-md-6">
+
+    <table class="table" style="width: 1050px">
+     <h2 style="color: #1e1f22">Entidad Afectada</h2>
+      <thead>
+        <th style="color: #1e1f22">Nombre</th>
+        <th style="color: #1e1f22">Editar</th>
+        <th style="color: #1e1f22">Eliminar</th>
+      </thead>
+      <tbody>
+        {% for clasificacion in entidades %}
+        <tr>
+          <td style="color: #1e1f22">{{ clasificacion.nombre }}</td>
+          <td style="color: #1e1f22"><a href="{% url 'enti_edit'  pk=clasificacion.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-success" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">Editar</a></td>
+          <td style="color: #1e1f22"><a href="{% url 'enti_delete' pk=clasificacion.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="width: 110px;height: 30px; background-color: #444444;border-color:#444444;border-radius: 0 ">Eliminar</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td style="color: #1e1f22">No hay entidades disponibles.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button class="btn btn-primary" style="margin-bottom:20px;background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">
+      <a href="{% url 'create_enti' %}" data-toggle="modal" data-target="#exampleModal" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">
+        <i class="fas fa-plus-circle mr-2"></i>
+        Nueva Entidad Afectada
+      </a>
+    </button>
+  </div>
+</div>
+
+
+
+<div id="conc" class="toggleable-table" style="display: none;">
+  <div class="col-md-6 mt-4">
+
+    <table class="table" style="width: 1050px">
+    <h2 style="color: #1e1f22">Conclusiones</h2>
+      <thead>
+        <th style="color: #1e1f22">Nombre</th>
+        <th style="color: #1e1f22">Editar</th>
+        <th style="color: #1e1f22">Eliminar</th>
+      </thead>
+      <tbody>
+        {% for clasificacion in concluciones %}
+        <tr>
+          <td style="color: #1e1f22">{{ clasificacion.nombre }}</td>
+          <td style="color: #1e1f22"><a href="{% url 'conclusion_edit'  pk=clasificacion.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-success" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">Editar</a></td>
+          <td style="color: #1e1f22"><a href="{% url 'conclusion_delete' pk=clasificacion.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="width: 110px;height: 30px; background-color: #444444;border-color:#444444;border-radius: 0 ">Eliminar</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td style="color: #1e1f22">No hay conclusiones disponibles.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button class="btn btn-primary" style="margin-bottom:20px;background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">
+      <a href="{% url 'conclusion_new' %}" data-toggle="modal" data-target="#exampleModal" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">
+        <i class="fas fa-plus-circle mr-2"></i>
+        Nueva Conclusión
+      </a>
+    </button>
+  </div>
+</div>
+
+<div id="satis" class="toggleable-table" style="display: none;">
+  <div class="col-md-6 mt-4">
+
+    <table class="table" style="width: 1050px">
+     <h2 style="color: #1e1f22">Satisfacción</h2>
+      <thead>
+        <th style="color: #1e1f22">Nombre</th>
+        <th style="color: #1e1f22">Editar</th>
+        <th style="color: #1e1f22">Eliminar</th>
+      </thead>
+      <tbody>
+        {% for clasificacion in satisfacciones %}
+        <tr>
+          <td style="color: #1e1f22">{{ clasificacion.nombre }}</td>
+          <td style="color: #1e1f22"><a href="{% url 'satis_edit'  pk=clasificacion.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-success" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">Editar</a></td>
+          <td style="color: #1e1f22"><a href="{% url 'satis_delete' pk=clasificacion.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="width: 110px;height: 30px; background-color: #444444;border-color:#444444;border-radius: 0 ">Eliminar</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td style="color: #1e1f22">No hay satisfacciones disponibles.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button class="btn btn-primary" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none; margin-bottom:20px">
+      <a href="{% url 'create_satis' %}" data-toggle="modal" data-target="#exampleModal" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">
+        <i class="fas fa-plus-circle mr-2"></i>
+        Nueva Satisfacción
+      </a>
+    </button>
+  </div>
+</div>
+
+
+<div id="cp" class="toggleable-table" style="display: none;">
+  <div class="col-md-6">
+
+    <table class="table" style="width: 1050px">
+     <h2 style="color: #1e1f22">Casos de Prensa</h2>
+      <thead>
+        <th style="color: #1e1f22">Nombre</th>
+        <th style="color: #1e1f22">Editar</th>
+        <th style="color: #1e1f22">Eliminar</th>
+      </thead>
+      <tbody>
+        {% for caso in casos %}
+        <tr>
+          <td style="color: #1e1f22">{{ caso.nombre }}</td>
+          <td style="color: #1e1f22"><a href="{% url 'caso_edit'  pk=caso.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-success" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">Editar</a></td>
+          <td style="color: #1e1f22"><a href="{% url 'caso_delete' pk=caso.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="width: 110px;height: 30px; background-color: #444444;border-color:#444444;border-radius: 0 ">Eliminar</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td style="color: #1e1f22">No hay casos de prensa disponibles.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button class="btn btn-primary" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none; margin-bottom:20px">
+      <a href="{% url 'create_caso' %}" data-toggle="modal" data-target="#exampleModal" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">
+        <i class="fas fa-plus-circle mr-2"></i>
+        Nuevo Caso de Prensa
+      </a>
+    </button>
+  </div>
+</div>
+
+<div id="mods" class="toggleable-table" style="display: none;">
+  <div class="col-md-6">
+
+    <table class="table" style="width: 1050px">
+    <h2 style="color: #1e1f22">Modalidades</h2>
+      <thead>
+        <th style="color: #1e1f22">Nombre</th>
+        <th style="color: #1e1f22">Editar</th>
+        <th style="color: #1e1f22">Eliminar</th>
+      </thead>
+      <tbody>
+        {% for modalidad in modalidades %}
+        <tr>
+          <td style="color: #1e1f22">{{ modalidad.nombre }}</td>
+          <td style="color: #1e1f22"><a href="{% url 'moda_edit'  pk=modalidad.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-success" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">Editar</a></td>
+          <td style="color: #1e1f22"><a href="{% url 'moda_delete' pk=modalidad.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="width: 110px;height: 30px; background-color: #444444;border-color:#444444;border-radius: 0 ">Eliminar</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td style="color: #1e1f22">No hay modalidades disponibles.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button class="btn btn-primary" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;margin-bottom:20px">
+      <a href="{% url 'create_moda' %}" data-toggle="modal" data-target="#exampleModal" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">
+        <i class="fas fa-plus-circle mr-2"></i>
+        Nueva Modalidad
+      </a>
+    </button>
+  </div>
+</div>
+
+<div id="vi" class="toggleable-table" style="display: none;">
+  <div class="col-md-6">
+
+    <table class="table" style="width: 1050px">
+    <h2 style="color: #1e1f22">Vías</h2>
+      <thead>
+        <th style="color: #1e1f22">Nombre</th>
+        <th style="color: #1e1f22">Editar</th>
+        <th style="color: #1e1f22">Eliminar</th>
+      </thead>
+      <tbody>
+        {% for via in vias %}
+        <tr>
+          <td style="color: #1e1f22">{{ via.nombre }}</td>
+          <td style="color: #1e1f22"><a href="{% url 'via_edit'  pk=via.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-success" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">Editar</a></td>
+          <td style="color: #1e1f22"><a href="{% url 'via_delete' pk=via.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="width: 110px;height: 30px; background-color: #444444;border-color:#444444;border-radius: 0 ">Eliminar</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td style="color: #1e1f22">No hay vías disponibles.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <button class="btn btn-primary" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none; margin-bottom:20px">
+      <a href="{% url 'create_via' %}" data-toggle="modal" data-target="#exampleModal" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none; ">
+        <i class="fas fa-plus-circle mr-2"></i>
+        Nueva Vía
+      </a>
+    </button>
+  </div>
+</div>
+
+<div id="proce" class="toggleable-table" style="display: none;">
+  <div class="col-md-6">
+
+    <table class="table" style="width: 1050px">
+    <h2 style="color: #1e1f22">Procedencia</h2>
+      <thead>
+        <th style="color: #1e1f22">Nombre</th>
+        <th style="color: #1e1f22">Editar</th>
+        <th style="color: #1e1f22">Eliminar</th>
+      </thead>
+      <tbody>
+        {% for procedencia in procedencias %}
+        <tr>
+          <td style="color: #1e1f22">{{ procedencia.nombre }}</td>
+          <td style="color: #1e1f22"><a href="{% url 'procedencia_edit'  pk=procedencia.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-success" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">Editar</a></td>
+          <td style="color: #1e1f22"><a href="{% url 'procedencia_delete' pk=procedencia.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="width: 110px;height: 30px; background-color: #444444;border-color:#444444;border-radius: 0 ">Eliminar</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td style="color: #1e1f22">No hay procedencias disponibles.</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <button class="btn btn-primary" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none; margin-bottom:20px">
+      <a href="{% url 'create_procedencia' %}" data-toggle="modal" data-target="#exampleModal" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">
+        <i class="fas fa-plus-circle mr-2"></i>
+        Nueva Procedencia
+      </a>
+    </button>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+</div>
+
+  <!-- Ventana modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="background-color: white">
+        <!-- Aquí se incluirá el contenido de la ventana modal -->
+
+        <div class="modal-header">
+
+        </div>
+        <!-- Aquí se incluirá el contenido de la ventana modal -->
+
+        <div class="modal-body"></div>
+        <!-- Aquí se incluirá el contenido del pie de página de la ventana modal -->
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+
+
+
+    <style>
+    table td,th{
+  color: whitesmoke;
+}
+    </style>
+
+
+<script>
+  $(document).ready(function() {
+    // Al hacer clic en el enlace, se carga la vista y se muestra en la ventana modal
+    $('a[data-toggle="modal"]').on('click', function(e) {
+      e.preventDefault();
+      var target = $(this).data('target');
+      var url = $(this).attr('href');
+      $(target + ' .modal-body').load(url);
+      $(target).modal('show');
+    });
+  });
+
+  function toggleTable(tableId) {
+    // Oculta todas las tablas excepto la que se está mostrando actualmente
+    var tables = document.querySelectorAll('.toggleable-table');
+    tables.forEach(function(table) {
+      if (table.id === tableId) {
+        table.style.display = 'table';
+      } else {
+        table.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+{% endblock %}

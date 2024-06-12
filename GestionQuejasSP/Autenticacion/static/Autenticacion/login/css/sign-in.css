@@ -1,0 +1,67 @@
+html,
+body {
+  height: 100%;
+}
+{% load static %}
+body {
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #495057;
+  color: #495057;
+    background-image: url("../img/anja2.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+   background-position:center calc(100% + 250px);
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.form-control {
+    color: #2c5ff9;
+    background-color: #fff;
+    border: var(--bs-border-width) solid #6c757d;
+}
+
+.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #2c5ff9;
+    --bs-btn-border-color: #2c5ff9;
+    --bs-btn-hover-bg: #9d9fce;
+    --bs-btn-hover-border-color: #9d9fce;
+}
+
+.text-body-secondary {
+    --bs-text-opacity: 1;
+    color: #f8f9fa69!important;
+}
+
+.btn-bd-primary {
+    --bd-violet-bg: #2c5ff9;
+    --bs-btn-bg: var(--bd-violet-bg);
+    --bs-btn-border-color: var(--bd-violet-bg);
+    --bs-btn-hover-bg: #9d9fce;
+    --bs-btn-hover-border-color: #adb5bd;}
+
+
+

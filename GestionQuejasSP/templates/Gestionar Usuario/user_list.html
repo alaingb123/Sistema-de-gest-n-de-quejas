@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+<!-- user_permissions/user_list.html -->
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+
+      #mi-tabla.table-striped thead {
+   background-image: linear-gradient(to left, rgba(84, 159, 39, 0.9), rgba(84, 159, 39, 0.75));
+color: white;
+}
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="checkout.css" rel="stylesheet">
+
+
+
+
+<div class="container">
+  <div class="py-5 text-center">
+    <img class="d-block mx-auto mb-4" src="{% static 'Autenticacion/login/img/S.png' %}" alt="" width="200" height="150">
+    <h2 style="color: #1e1f22">Lista de Usuarios</h2>
+  </div>
+
+  <div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-striped" id="mi-tabla" style="color: #1e1f22;font-size:15px; width: 800px;margin-left: 150px">
+        <thead class="table-striped thead">
+          <tr>
+            <th scope="col" style="border: 1px solid white;">Nombre de usuario</th>
+      <th scope="col" style="border: 1px solid white;">Grupos</th>
+      <th scope="col" style="border: 1px solid white;">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for user in page_obj %}
+    <tr>
+      <td style="font-size: 15px;font-weight: normal;font-family: Arial;border: 1px solid white;">{{ user.username }}</td>
+      <td style="border: 1px solid white;">
+        {% for group in user.groups.all %}
+        <span class="badge badge-primary" style="font-size: 15px;font-weight: normal;font-family: Arial">{{ group.name }}</span>
+        {% empty %}
+        <span class="badge badge-secondary" style="font-size: 15px;font-weight: normal;font-family: Arial">Usuario</span>
+        {% endfor %}
+      </td>
+      <td style="border: 1px solid white;">
+        <div class="btn-group" role="group">
+          <a href="{% url 'user_update' user.pk %}" class="btn btn-primary" style="width: 110px;height: 30px;background-color: #529e26;border-color: #529d26;border-radius: 0;margin-right: 10px">Editar</a>
+            <a href="{% url 'confirmiar_eliminacion' user.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="width: 110px;height: 30px; background-color: #444444;border-color:#444444;border-radius: 0 " >Eliminar</a>
+{#         <a href="{% url 'user_delete' user.pk %}" class="btn btn-danger" style="width: 110px;height: 30px; background-color: #444444;border-color:#444444;border-radius: 0 " onclick="return confirm('¿Estás seguro de que deseas eliminar este usuario?')">Eliminar</a>#}
+
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+    </div>
+  </div>
+</div>
+
+
+<!-- Mostrar enlaces a otras páginas -->
+{% if page_obj.has_other_pages %}
+    <nav aria-label="Navegación de página" style="margin-right: 250px">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1" aria-label="Primera" style="background-color: #ffffff; color: #1e1f22">
+                    <span aria-hidden="true" style="background-color: #ffffff; color: #1e1f22">&laquo;</span>
+                    <span class="sr-only" style="background-color: #ffffff; color: #1e1f22">Primera</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Anterior" style="background-color: #ffffff; color: #1e1f22">
+                    <span aria-hidden="true" style="background-color: #ffffff; color: #1e1f22">&lsaquo;</span>
+                    <span class="sr-only" style="background-color: #ffffff; color: #1e1f22">Anterior</span>
+                </a>
+            </li>
+        {% endif %}
+
+        <li class="page-item disabled" style="background-color: #ffffff; color: #1e1f22">
+            <span class="page-link" style="background-color: #ffffff; color: #1e1f22">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+            </span>
+        </li>
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Siguiente" style="background-color: #ffffff; color: #1e1f22">
+
+                    <span class="sr-only" style="background-color: #ffffff; color: #1e1f22">Siguiente</span>
+                <span aria-hidden="true" style="background-color: #ffffff; color: #1e1f22">&rsaquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Última" style="background-color: #ffffff; color: #1e1f22">
+                    <span aria-hidden="true" style="background-color: #ffffff; color: #1e1f22">&raquo;</span>
+                    <span class="sr-only" style="background-color: #ffffff; color: #1e1f22">Última</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+  </nav>
+{% endif %}
+
+
+
+ <!-- Ventana modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="background-color: white">
+        <!-- Aquí se incluirá el contenido de la ventana modal -->
+        <div class="modal-header">
+
+        <h3 class="modal-title" id="exampleModalLabel" style="color: black;margin-top: 10px;margin-left:10px">Eliminar Usuario</h3>
+
+
+        </div>
+
+        <!-- Aquí se incluirá el contenido de la ventana modal -->
+        <div class="modal-body"></div>
+
+        <!-- Aquí se incluirá el contenido del pie de página de la ventana modal -->
+        <div class="modal-footer"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<script>
+$(document).ready(function() {
+    // Al hacer clic en el enlace, se carga la vista y se muestra en la ventana modal
+    $('a[data-toggle="modal"]').on('click', function(e) {
+      e.preventDefault();
+      var target = $(this).data('target');
+      var url = $(this).attr('href');
+      $(target + ' .modal-body').load(url);
+      $(target).modal('show');
+    });
+  });
+
+{#function confirmarEliminacion() {#}
+{#  return confirm('¿Estás seguro de que deseas eliminar este usuario?');#}
+
+
+</script>
+
+
+</div>
+
+  {% endblock %}

@@ -1,0 +1,362 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Agrega la biblioteca jQuery UI -->
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+
+<!-- Agrega los estilos de jQuery UI -->
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/smoothness/jquery-ui.css">
+
+
+    <style>
+
+    input[type="checkbox"]:checked {
+  background-color: green !important;
+  border-color: green !important;
+  color: white !important;
+}
+
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .btn-bd-primary {
+        --bd-violet-bg: rgba(89, 92, 94, 0.87);
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8;
+      }
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="checkout.css" rel="stylesheet">
+
+<div class="container" >
+
+   <div class="py-5 text-center" >
+      <img class="d-block mx-auto mb-4"  src="{% static 'Autenticacion/login/img/S.png' %}" alt="" width="200" height="150" >
+      <h2 style="color: white">Insertar Respuesta</h2>
+    </div>
+
+
+      <div class="col-md-10 col-lg-8" style="position: absolute; left:20%">
+
+{% if context.error_message %}
+    <div class="alert alert-danger" role="alert">
+        {{ context.error_message|safe }}
+    </div>
+{% endif %}
+
+         <!-- Formulario -->
+       <form method="POST" action="{% url 'insertar_respuesta'  %}" enctype="multipart/form-data" style="color: white">
+  {% csrf_token %}
+
+<div class="row">
+    <div class="col-sm-6 mb-3">
+     <label for="nombreApellido" class="form-label" style="color:#1e1f22">Nombre y Apellido:</label>
+  <input type="text" class="form-control" maxlength="30" id="nombreApellido" name="nombreApellido"  style="background-color: #fbfcfd;color: #1e1f22;border-radius: 0">
+       <div class="invalid-feedback" style="color: background: linear-gradient(to right, #065ffa, #c61010)">
+        Por favor introduzca nombre y apellido.
+      </div>
+    </div>
+
+    <div class="col-sm-6 mb-3">
+       <div class="mb-3">
+  <label for="queja" class="form-label" style="color: #1e1f22 ">Queja:</label>
+  <input type="text" id="queja" class="form-control" maxlength="30" name="queja" readonly required  style="background-color: #fbfcfd;color: #1e1f22;border-radius: 0">
+  <!-- Campo oculto para enviar el ID de la queja -->
+  <input type="hidden" id="numero" name="numero"  style="background-color: #fbfcfd;color: #1e1f22;border-radius: 0">
+</div>
+<p>{{ request.POST.numero }}</p>
+    </div>
+
+
+
+<script>
+  $(function() {
+    var quejasDisponibles = [
+      {% for queja in context.quejas %}
+        { id: "{{ queja.id }}", value: "{{ queja }}" },
+      {% endfor %}
+    ];
+
+    $("#nombreApellido").autocomplete({
+      source: quejasDisponibles,
+      select: function(event, ui) {
+        // Asigna la representación en cadena de la queja al campo "queja"
+        $("#queja").val(ui.item.value);
+
+        // Asigna el ID de la queja al campo oculto "numero"
+        $("#numero").val(ui.item.id);
+
+        return false;
+      }
+    });
+  });
+
+  $(function() {
+  // Obtén referencias a los elementos del DOM
+  var checkboxEntregado = $("input[name='entrega']");
+  var selectSatisfaccion = $("#satisfaccion");
+  var inputFechaEntrega = $("#fechaE");
+
+  // Maneja el evento de cambio del checkbox
+  checkboxEntregado.on("change", function() {
+    if (checkboxEntregado.is(":checked")) {
+      // Si el checkbox está seleccionado, habilita los campos
+      selectSatisfaccion.prop("disabled", false);
+      inputFechaEntrega.prop("disabled", false);
+    } else {
+      // Si el checkbox no está seleccionado, deshabilita los campos y restablece sus valores
+      selectSatisfaccion.prop("disabled", true).val("");
+      inputFechaEntrega.prop("disabled", true).val("");
+    }
+  });
+});
+
+</script>
+
+
+  <div class="col-12 col-lg-6 mb-3">
+      <label for="responsable" class="form-label" style="color: #1e1f22 ">Responsable:</label>
+        <input type="text" class="form-control" maxlength="30" oninput="validateName()" id="responsable" name="responsable" placeholder="Ingrese el nombre del responsable" value="{{user.username}}" readonly required  style="background-color: #fbfcfd;color: #1e1f22;border-radius: 0">
+       <div class="invalid-feedback" style="color: background: linear-gradient(to right, #065ffa, #c61010)">
+        Por favor introduzca nombre y apellido.
+      </div>
+    </div>
+
+     <div class="col-sm-6 mb-3">
+       <label for="satisfaccion" class="form-label" style="color: #1e1f22 ">Satisfaccion:</label>
+        <select class="form-select" id="satisfaccion" name="satisfaccion" required disabled  style="background-color: #fbfcfd;color: #1e1f22;border-radius: 0">
+          <option value="">Elegir...</option>
+           {% for enti in context.satisfaccion %}
+          <option value="{{ enti.id }}">{{ enti.nombre  }}</option>
+          {% endfor %}
+        </select>
+      <div class="invalid-feedback" style="color: background: linear-gradient(to right, #065ffa, #c61010)">
+        Por favor seleccione un dato válido.
+      </div>
+      </div>
+
+     <div class="col-12 col-lg-6 mb-3">
+     <label for="conclusion" class="form-label" style="color: #1e1f22 ">Conclusiones:</label>
+        <select class="form-select" id="conclusion" name="conclusion" required  style="background-color: #fbfcfd;color: #1e1f22;border-radius: 0">
+          <option value="">Elegir...</option>
+        {% for enti in context.conclusion %}
+          <option value="{{ enti.id }}">{{ enti.nombre  }}</option>
+          {% endfor %}
+        </select>
+        <div class="invalid-feedback" style="color: background: linear-gradient(to right, #065ffa, #c61010)">
+        Por favor seleccione un dato válido.
+      </div>
+    </div>
+      <div class="col-sm-6 mb-3">
+     <label class="form-check-label" style="color: #1e1f22 ">Entregado</label>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" name="entrega"  style="background-color: #fbfcfd;color: #1e1f22;border-radius: 0;margin-top: 20px;width: 20px;height: 20px">
+        </div>
+    </div>
+    <div class="col-12 col-lg-6 mb-3">
+      <label for="fechaE" class="form-label" style="color: #1e1f22 ">Fecha Entrega</label>
+        <input type="date" class="form-control" id="fechaE" name="fechaE" required disabled  style="background-color: #fbfcfd;color: #1e1f22;border-radius: 0">
+      <div class="invalid-feedback" style="color: background: linear-gradient(to right, #065ffa, #c61010)">
+        Por favor seleccione una fecha.
+      </div>
+      </div>
+
+
+  <div class="col-12 col-lg-6 mb-3">
+       <label style="color:  #1e1f22">Documento:</label>
+       <div class="form-group" style="margin-right: 30px;border-radius: 0">
+ <div class="custom-file" style="background-color: #f3f8fc;">
+    <input type="file" name="documento" id="id_documento" class="custom-file-input" multiple style="background-color: white;color: #1e1f22;border-radius: 0;visibility: visible">
+    <label class="custom-file-label" for="id_documento" style="color: rgba(255,255,255,0.09);">Seleccionar archivos</label>
+    <span id="error-doc" class="alert alert-danger" style="color: #db3545; display: none;">Tamaño máximo: 14 Mb</span>
+  </div>
+</div>
+
+
+      <div class="mb-3">
+        <label for="descripcion" class="form-label" style="color: #1e1f22 ">Descripcion:</label>
+        <textarea class="form-control" id="descripcion" name="descripcion" placeholder="" required rows="20"  style="height: 250px;background-color: #fbfcfd;color: #1e1f22;border-radius: 0"></textarea>
+       <div class="invalid-feedback" style="color: background: linear-gradient(to right, #065ffa, #c61010)">
+        Por favor introduzca una descripcion.
+      </div>
+      </div>
+
+
+
+  <div>
+  <button class="btn btn-primary btn-lg" type="submit" style="background-color: #529e26;border-color: #529d26;border-radius: 0;width: 200px;float:left;margin-left:230px;margin-right: 10px">
+    Insertar
+  </button>
+  <a href="{% url 'dash' %}" class="btn btn-secondary mr-2" style="background-color: #444444;border-color:#444444 ;border-radius: 0;width: 200px;float:left; height: 48px;font-size: 1.25rem;">
+    Volver
+  </a>
+</div>
+
+       <div style="height: 80px;">
+      <span style="display: inline-block; width: 20px; height: 20px; background-color: transparent;"></span>
+  </div>
+
+       </form>
+
+
+  <script>
+  function validateName() {
+  const input = document.getElementById("responsable");
+  const value = input.value;
+  const isValid = /^[a-zA-Z\s]{0,30}$/.test(value);
+  if (!isValid) {
+    input.setCustomValidity("Introduzca solo letras y espacios (máximo 30 caracteres)");
+  } else {
+    input.setCustomValidity("");
+  }
+}
+
+
+  const entregadoCheckbox = document.querySelector('input[name="entrega"]');
+  const fechaEntregaInput = document.querySelector('input[name="fechaE"]');
+  const conclusionSelect = document.querySelector('select[name="conclusion"]');
+  const satisfaccionSelect = document.querySelector('select[name="satisfaccion"]');
+
+  entregadoCheckbox.addEventListener('change', function() {
+    if (this.checked) {
+      satisfaccionSelect.disabled = false;
+      fechaEntregaInput.disabled = false;
+    } else {
+      satisfaccionSelect.disabled = true;
+      fechaEntregaInput.disabled = true;
+    }
+  });
+
+
+
+  const form = document.querySelector('form');
+  form.addEventListener('submit', function(e) {
+    if (!form.checkValidity()) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    form.classList.add('was-validated');
+  });
+
+
+const form = document.querySelector('form');
+
+// Validación para el campo "Nombre y Apellidos"
+const nombreApellidosInput = document.getElementById('nombre_apellidos');
+const nombreApellidosRegex = /^[A-Z][a-zñáéíóú]+\s([A-Z][a-zñáéíóú]+\s?)*$/;
+
+nombreApellidosInput.addEventListener('input', function(e) {
+  const value = e.target.value.trim();
+  if (!nombreApellidosRegex.test(value)) {
+    nombreApellidosInput.setCustomValidity('El nombre y los apellidos deben tener el formato correcto: la primera letra de cada palabra debe ser mayúscula y no deben contener números ni caracteres especiales. Debe contener el nombre y apellidos.');
+  } else {
+    nombreApellidosInput.setCustomValidity('');
+  }
+});
+
+// Validación para el campo de fecha
+const fechaR = document.getElementById("fechaR");
+fechaR.addEventListener("input", function() {
+  var fechaSeleccionada = new Date(fechaR.value);
+  var fechaActual = new Date();
+  if (fechaSeleccionada > fechaActual) {
+    fechaR.setCustomValidity("Por favor seleccione una fecha anterior o igual a la fecha actual.");
+  } else {
+    fechaR.setCustomValidity("");
+  }
+});
+
+// Agregar validación a todos los campos requeridos
+const requiredFields = form.querySelectorAll('[required]');
+requiredFields.forEach(function(field) {
+  field.addEventListener('invalid', function(e) {
+    e.preventDefault();
+    field.classList.add('is-invalid');
+  });
+  field.addEventListener('input', function(e) {
+    if (field.validity.valid) {
+      field.classList.remove('is-invalid');
+    }
+  });
+});
+
+
+</script>
+
+
+
+      </div>
+</div>
+
+      {% endblock %}

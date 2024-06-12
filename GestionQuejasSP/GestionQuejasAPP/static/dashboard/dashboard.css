@@ -1,0 +1,124 @@
+body {
+  font-size: .875rem;
+}
+
+.feather {
+  width: 16px;
+  height: 16px;
+   box-shadow: inset -1px 0 0 rgba(43, 45, 47, 0.87);
+}
+
+/*
+ * Sidebar
+ */
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  /* rtl:raw:
+  right: 0;
+  */
+  bottom: 0;
+  /* rtl:remove */
+  left: 0;
+  z-index: 100; /* Behind the navbar */
+  padding: 48px 0 0; /* Height of navbar */
+  box-shadow: inset -1px 0 0 rgb(13, 165, 230);
+}
+
+@media (max-width: 767.98px) {
+  .sidebar {
+    top: 5rem;
+  }
+}
+
+.sidebar-sticky {
+  height: calc(100vh - 48px);
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  background-color: #333333;
+}
+
+.sidebar .nav-link {
+  font-weight: 500;
+  background-color: #333333;
+  color: #faf1cf;
+}
+
+.sidebar .nav-link .feather {
+  margin-right: 4px;
+  color: #0da5e6;
+}
+
+.sidebar .nav-link.active {
+  color: #0da5e6;
+}
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+  color: inherit;
+}
+
+.sidebar-heading {
+  font-size: .75rem;
+}
+
+table.table-striped.table-sm td {
+  border-right: 1px solid black;
+}
+
+table.table-striped.table-sm td:last-child {
+  border-right: none;
+}
+
+/*
+ * Navbar
+ */
+
+.navbar-brand {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+ background-color: rgb(13, 165, 230);
+  box-shadow: inset -1px 0 0 rgb(13, 165, 230);
+}
+
+.navbar .navbar-toggler {
+  top: .25rem;
+  right: 1rem;
+}
+
+.navbar .form-control {
+  padding: .75rem 1rem;
+}
+
+.form-control-dark {
+   color: rgba(238, 245, 250, 0.87);
+  background-color: rgba(32, 33, 35, 0.87);
+  border-color: rgba(32, 33, 35, 0.87);
+}
+
+.form-control-dark:focus {
+  border-color: transparent;
+  box-shadow: 0 0 0 3px rgb(13, 165, 230);
+}
+
+.navbar-dark {
+    --bs-navbar-color: rgb(250, 241, 207);
+    --bs-navbar-hover-color: rgb(13, 165, 230);
+    --bs-navbar-disabled-color: rgb(250, 241, 207);
+    --bs-navbar-active-color: rgba(43, 45, 47, 0.87);
+    --bs-navbar-brand-color: #fff;
+    --bs-navbar-brand-hover-color: #fff;
+     --bs-navbar-toggler-border-color: rgba(43, 45, 47, 0.87);
+
+
+}
+
+.navbar-nav {
+    --bs-nav-link-padding-x: 0;
+    --bs-nav-link-padding-y: 0.5rem;
+    --bs-nav-link-color: var(--bs-navbar-color);
+    --bs-nav-link-hover-color: var(--bs-navbar-hover-color);
+    --bs-nav-link-disabled-color: var(--bs-navbar-disabled-color);
+
+}

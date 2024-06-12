@@ -1,0 +1,268 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" >
+  <div class="row" >
+    <div class="col-md-8 offset-md-2" >
+      <h1 class="mb-4" style="color: #1e1f22;margin-top: 30px" >Ver queja</h1>
+      <hr class="mb-4">
+
+
+      <div class="queja-info mb-4" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);border-radius: 0; background-color: white;">
+        <h2 class="mb-4" style="color: #1e1f22">Registro de queja</h2>
+        <div class="row">
+          <div class="col-md-6"  style="color: #1e1f22">
+            <p><strong>Número:</strong> {{ queja.numero }}</p>
+            <p><strong>Nombre:</strong> {{ queja.nombre_apellidos }}</p>
+            <p><strong>Teléfono:</strong> {% if queja.telefono %}{{ queja.telefono }}{% endif %}</p>
+            <p><strong>Dirección:</strong> {{ queja.direccion }}</p>
+            <p><strong>Entidad afectada:</strong> {{ queja.entidadAfectada }}</p>
+            <p><strong>Modalidad:</strong> {{ queja.modalidad }}</p>
+            <p><strong>Vía:</strong> {{ queja.via }}</p>
+            <p><strong>Procedencia:</strong> {{ queja.procedencia }}</p>
+            <p><strong>Clasificación:</strong> {{ queja.clasificacion }}</p>
+            <p><strong>Caso prensa:</strong> {{ queja.casoPrensa }}</p>
+             {% if queja.documentos.all %}
+  <p><strong>Archivos adjuntos:</strong>
+  <ul>
+    {% for documento in queja.documentos.all %}
+      <li>
+        <a href="{{ documento.archivo.url }}">{{ documento.archivo.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+            <p><strong>Fecha de registro:</strong> {{ queja.fechaR }}</p>
+            <p><strong>Fecha de término:</strong> {{ queja.fechaT }}</p>
+              <button type="button" class="btn btn-primary" onclick="abrirVentana('{{ queja.argumento }}')" style="width: 150px;height: 40px;margin-top:10px;background-color: #4a9120;border-color: #4c9422;border-radius: 0">Ver argumento</button>
+          </div>
+        </div>
+      </div>
+
+
+
+    {% if queja.respuesta %}
+      <div class="queja-info mb-4" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);border-radius: 0; background-color: white;">
+        <h2 class="mb-4" style="color: #1e1f22">Respuesta</h2>
+        <div class="row">
+          <div class="col-md-6" style="color: #1e1f22">
+
+            <p><strong>Responsable:</strong> {{ queja.respuesta.responsable }}</p>
+            <p><strong>Conclusión:</strong> {{ queja.respuesta.conclusion }}</p>
+            <p><strong>Fecha respuesta:</strong> {{ queja.respuesta.created }}</p>
+         {% if queja.respuesta.documentos.all %}
+  <p><strong>Archivos adjuntos:</strong>
+  <ul>
+    {% for documento in queja.respuesta.documentos.all %}
+      <li>
+        <a href="{{ documento.archivo.url }}">{{ documento.archivo.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+              <p><strong>Entrega:</strong> {% if queja.respuesta.entrega is True %} Entregada {% endif %}</p>
+              <p><strong>Satisfacción:</strong> {% if  queja.respuesta.satisfaccion  %}{{ queja.respuesta.satisfaccion.nombre }} {% endif %}</p>
+              <p><strong>Fecha de entrega:</strong> {% if queja.respuesta.fechaE  %}{{ queja.respuesta.fechaE }} {% endif %}</p>
+            <button type="button" class="btn btn-primary" onclick="abrirVentana('{{ queja.respuesta.descripcion }}')" style="width: 150px;height: 40px;margin-top:10px;background-color: #4a9120;border-color: #4c9422;border-radius: 0">Ver Respuesta</button>
+
+
+
+          </div>
+        </div>
+
+      </div>
+      {% endif %}
+
+
+    </div>
+  </div>
+</div>
+
+
+
+    <div class="queja-buttons mb-4" style="margin-right: 300px">
+
+{% for group in user.groups.all %}
+            {% if "Funcionario" == group.name %}
+    {% if queja.respuesta %}
+
+     {% else %}
+    {% if queja.no_procedece == False %}
+ <button class="nav-link px-3" onclick="NoProcede()" style="background-color: rgb(74,144,32);width: 140px; height: 45px;font-size: 16px; color: #ffffff;border: none; margin-right: 30px">No Procede</button>
+        {% else %}
+         <button class="nav-link px-3" onclick="Procede()" style="background-color: rgb(74,144,32);width: 100px; height: 45px;font-size: 16px; color: #fffdfd;border: none; margin-right: 30px">Procede</button>
+    {% endif %}
+
+    {% endif %}
+
+    {% endif %}
+    {% endfor %}
+
+
+
+        <a href="{% url 'dash' %}" class="btn btn-secondary mr-2"  style="background-color: #444444;border-color:#444444 ;border-radius: 0;width: 100px;float:left; height: 44px;font-size: 15px;font-family: Arial; font-weight:bold;margin-right: 10px ">Volver</a>
+    {% for group in user.groups.all %}
+            {% if "JefeDep" == group.name %}
+          {% if not queja.queja_us %}
+              {% if  queja.modalidad.nombre != "6-Reconocimiento" and queja.modalidad.nombre != "4-Sugerencia" %}
+              {% if not queja.respuesta %}
+<a href="{% url 'insertar_respuesta_directa' id=queja.pk %}" class="btn btn-primary" style="background-color: #4a9120;border-color: #4c9422;border-radius: 0;width: 200px;float: right; height: 44px;font-size: 15px;font-family: Arial; font-weight:bold;margin-right: 10px;">Responder Queja</a>
+{% else %}
+<a href="{% url 'modificarR' numero=queja.respuesta.numero_id %}" class="btn btn-primary" style="background-color: #4a9120;border-color: #4c9422;border-radius: 0;width: 200px;float: right; height: 44px;font-size: 15px;font-family: Arial; font-weight:bold;margin-right: 10px;">Modificar Respuesta</a>
+
+         {% endif %}
+              {% endif  %}{% endif %}
+    {% endif %}
+    {% endfor %}
+      </div>
+
+
+
+  <div class="modal" id="NoProcedeModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">¿Está seguro de que desea clasificar esta queja como "no procede"?</h4>
+
+      </div>
+      <div class="modal-body">
+        <p class="lead">Esto podria traer las siguientes consecuencias:</p>
+        <p >-Esta queja no se tomara en cuenta para analisis estadisticos</p>
+        <p >-Esta queja no la podra analizar ni responder ningun Jefe de Departamento</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'no_procede' pk=queja.pk %}'" style="background-color: #008bff;border-color: #008bff;border-radius: 0" >Sí</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="document.getElementById('NoProcedeModal').style.display='none'" style="border-radius: 0">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+     <div class="modal" id="ProcedeModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">¿Está seguro de que desea clasificar esta queja como "Procede"?</h4>
+
+      </div>
+      <div class="modal-body">
+        <p class="lead">Esto podria traer las siguientes consecuencias:</p>
+        <p >-Esta queja se tomara en cuenta para analisis estadisticos</p>
+        <p >-Esta queja la podra analizar y responder el Jefe de Departamento correspondiente</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'procede' pk=queja.pk %}'" style="background-color: #4a9120;border-color: #4c9422;border-radius: 0" >Sí</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="document.getElementById('ProcedeModal').style.display='none'" style="border-radius: 0">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function NoProcede() {
+    var modal = document.getElementById("NoProcedeModal");
+    modal.style.display = "block";
+}
+
+ function Procede() {
+    var modal = document.getElementById("ProcedeModal");
+    modal.style.display = "block";
+}
+
+
+</script>
+
+
+
+    <style>
+
+     body {
+    background-color: white; /* Cambiar el color de fondo */
+  }
+
+  .respuesta {
+    font-size: 16px;
+    color: #333;
+    background-color: #2b2b2b;
+    padding: 20px;
+    max-width: 90%; /* Limitar el ancho del contenedor al 90% */
+    margin: 0 auto; /* Centrar el contenedor horizontalmente */
+    word-wrap: break-word; /* Romper las palabras largas en varias líneas */
+  }
+
+    .queja-info {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.queja-info p {
+  margin-bottom: 8px;
+}
+
+.queja-info strong {
+  display: inline-block;
+  min-width: 120px;
+  font-weight: 600;
+  margin-right: 16px;
+}
+
+.queja-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 767.98px) {
+  .queja-info strong {
+    min-width: auto;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+    </style>
+<script>
+  function abrirVentana(respuesta) {
+    var ventana = window.open('respuesta.html', '_blank', 'toolbar=0,location=0,menubar=0,width=600,height=400');
+    ventana.document.write('<html><head><title>Respuesta</title><style>body {background-color: #f0f0f0; font-family: Arial, sans-serif;} .respuesta {font-size: 16px; color: #333; background-color: #ccc; padding: 20px; max-width: 90%; margin: 0 auto; word-wrap: break-word; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);}</style></head><body><div class="respuesta">' + respuesta + '</div></body></html>');
+    var ancho = ventana.innerWidth || ventana.document.documentElement.clientWidth || ventana.document.body.clientWidth;
+    var alto = ventana.innerHeight || ventana.document.documentElement.clientHeight || ventana.document.body.clientHeight;
+    var izquierda = (ventana.screen.width - ancho) / 2;
+    var arriba = (ventana.screen.height - alto) / 2;
+    ventana.resizeTo(600, 400);
+    ventana.moveTo(izquierda, arriba);
+    ventana.moveTo((screen.width - ventana.outerWidth) / 2, (screen.height - ventana.outerHeight) / 2);
+  }
+
+
+   function abrirVentana(argumento) {
+    var ventana = window.open('argumento.html', '_blank', 'toolbar=0,location=0,menubar=0,width=600,height=400');
+    ventana.document.write('<html><head><title>Argumento</title><style>body {background-color: #f0f0f0; font-family: Arial, sans-serif;} .argumento {font-size: 16px; color: #333; background-color: #ccc; padding: 20px; max-width: 90%; margin: 0 auto; word-wrap: break-word; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);}</style></head><body><div class="argumento">' + argumento + '</div></body></html>');
+    var ancho = ventana.innerWidth || ventana.document.documentElement.clientWidth || ventana.document.body.clientWidth;
+    var alto = ventana.innerHeight || ventana.document.documentElement.clientHeight || ventana.document.body.clientHeight;
+    var izquierda = (ventana.screen.width - ancho) / 2;
+    var arriba = (ventana.screen.height - alto) / 2;
+    ventana.resizeTo(600, 400);
+    ventana.moveTo(izquierda, arriba);
+    ventana.moveTo((screen.width - ventana.outerWidth) / 2, (screen.height - ventana.outerHeight) / 2);
+
+
+  $(document).ready(function() {
+    // Al hacer clic en el enlace, se carga la vista y se muestra en la ventana modal
+    $('a[data-toggle="modal"]').on('click', function(e) {
+      e.preventDefault();
+      var target = $(this).data('target');
+      var url = $(this).attr('href');
+      $(target + ' .modal-body').load(url);
+      $(target).modal('show');
+    });
+  });
+  }
+</script>
+
+{% endblock %}

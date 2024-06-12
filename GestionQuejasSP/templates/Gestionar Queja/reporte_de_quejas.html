@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+  <h1 class="mt-4">Reporte de Quejas del Mes {{ mes }} del {{ year }}</h1>
+
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Total de Quejas: {{ informeT.total_quejas }}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Quejas Respondidas: {{ informeT.con_respuesta }}</h5>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-6">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Respuestas entregadas: {{ informeT.entregada }}</h5>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Respuestas sin entregar: {{ informeT.respondida }}</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-6 offset-md-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Quejas Atrasadas: {{ informeT.atrasada }}</h5>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-md-6 offset-md-3">
+      <div class="card text-center">
+        <div class="card-body">
+          <h5 class="card-title">Quejas Inconformes: {{ informeT.inconforme }} </h5>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <div class="container">
+    <div class="row mt-4">
+        {% for informe_entidad in informe_entidades %}
+        {% if informe_entidad.informe.total_quejas != 0 %}
+        <div class="col-sm-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Informe para la entidad: {{ informe_entidad.entidad }}</h5>
+                    <div class="card-text">
+                        <p>Total de Quejas: {{ informe_entidad.informe.total_quejas }}</p>
+                        <p>Quejas Respondidas: {{ informe_entidad.informe.con_respuesta }}</p>
+                        <p>Respuestas entregadas: {{ informe_entidad.informe.entregada }}</p>
+                        <p>Respuestas sin entregar: {{ informe_entidad.informe.respondida }}</p>
+                        <p>Quejas Atrasadas: {{ informe_entidad.informe.atrasada }}</p>
+                        <p>Quejas Inconformes: {{ informe_entidad.informe.inconforme }}</p>
+                    </div>
+                    {% if informe_entidad.informe.atrasada != 0 %}
+                    <!-- Mostrar la lista de quejas atrasadas -->
+                    <div class="mt-4">
+                        <h6>Lista de Quejas Atrasadas</h6>
+                        <ul class="list-unstyled">
+                            {% for queja_atrasada in informe_entidad.informe.lista_quejas_atrasadas %}
+                            <li><a href="{% url 'ver_queja' queja_atrasada.pk %}"><strong>#{{ queja_atrasada.numero }}</strong> - {{ queja_atrasada.nombre_apellidos }} - Asunto: {{ queja_atrasada.asunto }} - FechaT: {{ queja_atrasada.fechaT }}</a>
+                                {% if not queja_atrasada.analisis %}
+
+
+                                     <a href="{% url 'analisis'   queja_atrasada.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-success" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">Motivo</a>
+
+                                {% else %}
+
+                                    <a href="{% url 'edit_analisis'  queja_atrasada.analisis.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-success" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">Motivo</a>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    {% if informe_entidad.informe.inconforme != 0 %}
+                    <!-- Mostrar la lista de quejas inconformes -->
+                    <div class="mt-4">
+                        <h6>Lista de Quejas Inconformes</h6>
+                        <ul class="list-unstyled">
+                            {% for queja_inconforme in informe_entidad.informe.lista_quejas_inconformes %}
+                            <li><a href="{% url 'ver_queja' queja_inconforme.pk %}"><strong>#{{ queja_inconforme.numero }}</strong> - {{ queja_inconforme.nombre_apellidos }} - Asunto: {{ queja_inconforme.asunto }}  - Responsable: {{ queja_inconforme.respuesta.responsable }}</a>
+                               {% if not queja_inconforme.analisis %}
+
+
+                                   <a href="{% url 'analisis'  queja_inconforme.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-success" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">Motivo</a>
+                                {% else %}
+                                   <a href="{% url 'edit_analisis'  queja_inconforme.analisis.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-success" style="background-color: #529e26;border-color: #529d26;color:white; text-decoration:none;">Motivo</a>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content" style="background-color: white">
+        <!-- Aquí se incluirá el contenido de la ventana modal -->
+
+        <div class="modal-header">
+
+        </div>
+        <!-- Aquí se incluirá el contenido de la ventana modal -->
+
+        <div class="modal-body"></div>
+        <!-- Aquí se incluirá el contenido del pie de página de la ventana modal -->
+        <div class="modal-footer"></div>
+      </div>
+    </div>
+  </div>
+
+
+    <script>
+
+$(document).ready(function() {
+    // Al hacer clic en el enlace, se carga la vista y se muestra en la ventana modal
+    $('a[data-toggle="modal"]').on('click', function(e) {
+      e.preventDefault();
+      var target = $(this).data('target');
+      var url = $(this).attr('href');
+      $(target + ' .modal-body').load(url);
+      $(target).modal('show');
+    });
+  });
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<!-- CSS de Datepicker -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+<!-- JavaScript de Datepicker -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.es.min.js"></script>
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/checkout/">
+<link href="{% static  'css/insertar.css' %}" rel="stylesheet">
+
+    <style>
+     input[type="checkbox"]:checked {
+  background-color: green !important;
+  border-color: green !important;
+  color: white !important;
+}
+
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
+
+
+      @media (max-width: 767px) {
+  .col-md-10 {
+    width: 100%; /* Change the width to 100% for mobile view */
+    position: static; /* Remove absolute positioning for mobile view */
+    left: 0; /* Remove left positioning for mobile view */
+    margin-left: 0; /* Remove left margin for mobile view */
+  }
+
+    </style>
+
+
+    <!-- Custom styles for this template -->
+    <link href="checkout.css" rel="stylesheet">
+
+
+
+<div class="container">
+
+  <div class="py-5 text-center" >
+      <img class="d-block mx-auto mb-4"  src="{% static 'Autenticacion/login/img/S.png' %}" alt="" width="200" height="150" >
+      <h2 style="color: #1e1f22">Editar Respuesta</h2>
+    </div>
+
+
+      <div class="col-md-10 col-lg-8" style="position: absolute; left:20%">
+         <!-- Formulario -->
+        <form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+            
+
+
+   <div class="row" style="color: #1e1f22">
+    <div class="col-sm-6 mb-3">
+     <label for="responsable" class="form-label">Responsable:</label>
+  <input type="text" class="form-control" maxlength="30" oninput="validateName()" id="responsable" name="responsable" placeholder="" value="{{ respuesta.responsable }}" required  style="background-color: white;color: #1e1f22;border-radius: 0">
+      <div class="invalid-feedback">
+        Por favor introduzca su nombre y apellido.
+      </div>
+    </div>
+       <script>
+          function validateName() {
+  const input = document.getElementById("responsable");
+  const value = input.value;
+  const isValid = /^[a-zA-Z\s]{0,30}$/.test(value);
+  if (!isValid) {
+    input.setCustomValidity("Introduzca solo letras y espacios (máximo 30 caracteres)");
+  } else {
+    input.setCustomValidity("");
+  }
+}
+</script>
+    <div class="col-sm-6 mb-3">
+       <label for="satisfaccion" class="form-label">Satisfaccion:</label>
+        <select class="form-select" id="satisfaccion" name="satisfaccion" required  {% if not respuesta.entrega %} disabled   {% endif %} style="background-color: #ffffff;color: #1e1f22;border-radius: 0">
+          <option value="">Elegir...</option>
+        <p>{{ respuesta.satisfaccion }}</p>
+        {% for enti in context.satisfaccion %}
+         <option value={{ enti.id }} {% if respuesta.satisfaccion_id == enti.id %}selected{% endif %}>{{ enti.nombre }}</option>
+          {% endfor %}
+        </select>
+        <div class="invalid-feedback">
+          Por favor seleccione un dato válido.
+        </div>
+      </div>
+       <div class="col-12 col-lg-6 mb-3">
+     <label for="conclusion" class="form-label">Conclusiones:</label>
+         <select class="form-select" id="conclusion" name="conclusion" required style="background-color: white;color: #1e1f22;border-radius: 0">
+          <option value="">Elegir...</option>
+           {% for enti in context.conclusion %}
+         <option value={{ enti.id }} {% if respuesta.conclusion_id == enti.id %}selected{% endif %}>{{ enti.nombre }}</option>
+          {% endfor %}
+        </select>
+        <div class="invalid-feedback">
+          Por favor seleccione un dato válido.
+        </div>
+      </div>
+     <div class="col-sm-6 mb-3">
+     <label class="form-check-label">Entregado</label>
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input" name="entrega" {% if respuesta.entrega %}  checked{% endif %}  style="background-color: white;color: #1e1f22;border-radius: 0;margin-top: 20px;width: 20px;height: 20px">
+        </div>
+    </div>
+      <div class="col-12 col-lg-6 mb-3">
+      <label for="fechaE" class="form-label">Fecha Entrega</label>
+        <input type="date" class="form-control" id="fechaE" name="fechaE"  value="{{ respuesta.fechaE|date:'Y-m-d' }}" {% if not respuesta.entrega %}disabled{% endif %} {% if respuesta.entrega %}required{% endif %}  style="background-color: white;color: #1e1f22;border-radius: 0">
+        <div class="invalid-feedback">
+          Por favor seleccione una fecha.
+        </div>
+      </div>
+
+
+
+
+  <div class="custom-file" style="background-color: #f3f8fc;">
+  <input type="file" name="documento" id="id_documento" class="custom-file-input" multiple style="background-color: white;color: #1e1f22;border-radius: 0;visibility: visible">
+  <label class="custom-file-label" for="id_documento" style="color: rgba(255,255,255,0.09);">
+    Seleccionar archivos
+  </label>
+  {% if respuesta.documentos %}
+    <p>Los documentos actuales son:</p>
+    <ul>
+      {% for documento in respuesta.documentos.all %}
+        <li>
+          <a href="{{ documento.archivo.url }}">{{ documento.archivo.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+  <span id="error-doc" class="alert alert-danger" style="color: #db3545; display: none;">Tamaño máximo: 14 Mb</span>
+</div>
+
+
+      <div class="mb-3" style="margin-top: 200px">
+        <label for="descripcion" class="form-label" >Descripcion:</label>
+        <textarea class="form-control" id="descripcion" name="descripcion" placeholder="" required rows="20" style="height: 250px;background-color: white;color: #1e1f22;border-radius: 0">{{ respuesta.descripcion }}</textarea>
+        <div class="invalid-feedback">
+          Por favor introduzca una descripcion.
+        </div>
+      </div>
+    </div>
+<div>
+  <button class="btn btn-primary btn-lg" type="submit" style="background-color: #529e26;border-color: #529d26;border-radius: 0;width: 200px;float:left;margin-left:230px;margin-right: 10px">Editar</button>
+    <a href="{% url 'dash' %}" class="btn btn-secondary mr-2" style="background-color: #444444;border-color:#444444 ;border-radius: 0;width: 200px;float:left; height: 48px;font-size: 1.25rem;">
+    Volver
+  </a>
+</div>
+
+         <div style="height: 80px;">
+      <span style="display: inline-block; width: 20px; height: 20px; background-color: transparent;"></span>
+  </div>
+</form>
+
+ <script>
+  const responsableInput = document.getElementById('responsable');
+  const responsableRegex = /^[A-Z][a-z]+\s([A-Z][a-z]+\s?)*$/;
+
+  responsableInput.addEventListener('input', function(e) {
+    const value = e.target.value.trim();
+    if (value.length < 3) {
+      responsableInput.setCustomValidity('El responsable debe tener al menos 3 letras.');
+    } else if (!responsableRegex.test(value)) {
+      responsableInput.setCustomValidity('El responsable debe tener el formato correcto: la primera letra de cada palabra debe ser mayúscula y no deben contener números ni caracteres especiales.');
+    } else {
+      responsableInput.setCustomValidity('');
+    }
+  });
+
+  const entregadoCheckbox = document.querySelector('input[name="entrega"]');
+  const satisfaccionSelect = document.querySelector('select[name="satisfaccion"]');
+  const fechaEntregaInput = document.querySelector('input[name="fechaE"]');
+
+  // Si el checkbox de entregado está seleccionado, hacer que la fecha de entrega sea obligatoria
+ entregadoCheckbox.addEventListener('change', function() {
+  if (this.checked) {
+    fechaEntregaInput.required = true;
+    fechaEntregaInput.disabled = false;
+    satisfaccionSelect.disabled =false;
+  } else {
+      satisfaccionSelect.disabled =true;
+      satisfaccionSelect.value ="";
+      satisfaccionSelect.required =false;
+    fechaEntregaInput.required = false;
+    fechaEntregaInput.disabled = true;
+    fechaEntregaInput.value = ""; // Limpiar el valor del campo de fecha
+    fechaEntregaInput.classList.remove('is-invalid'); // Remover la clase 'is-invalid' si estaba presente
+  }
+});
+
+
+  const form = document.querySelector('form');
+  form.addEventListener('submit', function(e) {
+    if (!form.checkValidity()) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    form.classList.add('was-validated');
+  });
+</script>
+
+
+
+      {% endblock %}

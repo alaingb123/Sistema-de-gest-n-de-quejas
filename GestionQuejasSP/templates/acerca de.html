@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+<head>
+<!-- CSS de Datepicker -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.0/css/bootstrap.min.css" integrity="sha512-Ps3y/8CvLgR1Ck1v0dJNfMzO5V2QgC8D0xOxM6bBak5WlQyJxhYsP6Oy+Z3s7tWgl7sZGxYwXv4DvWkF8IhEeQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+  <link href="{% static 'css/insertar.css' %}" rel="stylesheet">
+
+  <style>
+    /* Estilos generales */
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    .b-example-divider {
+      width: 100%;
+      height: 3rem;
+      background-color: rgba(0, 0, 0, .1);
+      border: solid rgba(0, 0, 0, .15);
+      border-width: 1px 0;
+      box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+    }
+
+    .b-example-vr {
+      flex-shrink: 0;
+      width: 1.5rem;
+      height: 100vh;
+    }
+
+    .bi {
+      vertical-align: -.125em;
+      fill: currentColor;
+    }
+
+    .nav-scroller {
+      position: relative;
+      z-index: 2;
+      height: 2.75rem;
+      overflow-y: hidden;
+    }
+
+    .nav-scroller .nav {
+      display: flex;
+      flex-wrap: nowrap;
+      padding-bottom: 1rem;
+      margin-top: -1px;
+      overflow-x: auto;
+      text-align: center;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .btn-bd-primary {
+      /* Estilos para los botones */
+    }
+
+    .bd-mode-toggle {
+      z-index: 1500;
+    }
+
+    .descripcion {
+      /* Estilos para el texto de descripción */
+    }
+
+    .card {
+      /* Estilos para la tarjeta */
+    }
+
+    /* Media query para estilos específicos en la vista móvil */
+    @media (max-width: 768px) {
+      .form-group {
+        width: 100%; /* Ocupa el ancho completo en la vista móvil */
+        max-width: none; /* Elimina el ancho máximo en la vista móvil */
+      }
+
+      .card {
+        width: 100%; /* Ocupa el ancho completo en la vista móvil */
+        margin-left: 0; /* Ajusta el margen izquierdo en la vista móvil */
+        height: auto; /* Ajusta la altura automáticamente en la vista móvil */
+      }
+
+      .descripcion {
+        padding: 0 10px; /* Ajusta el relleno en la vista móvil */
+      }
+    }
+
+    .rounded-circle {
+  border-radius: 50%;
+}
+  </style>
+
+    <!-- Custom styles for this template -->
+    <link href="checkout.css" rel="stylesheet">
+</head>
+
+
+
+
+<body>
+
+  <div class="container" style="margin-left: 7%; overflow-x: hidden">
+  <div class="py-5 text-center">
+<h2 style="color: #1e1f22;">Acerca De</h2>
+  </div>
+  <div class="mx-auto" style="width: 90%; max-width: 900px; height: 400px; margin-bottom: 20px; background: linear-gradient(to right, rgba(64, 255, 0, 0.27), rgba(64, 255, 0, 0.27), rgba(135, 255, 116, 0.2), rgba(64, 255, 0, 0.27), rgba(64, 255, 0, 0.27);">
+    <p class="descripcion" style="color: #1e1f22; margin-top: 30px">La digitalización de la gestión de quejas en salud pública es de suma importancia debido a que permite una gestión más efectiva y eficiente de las quejas y reclamos que recibe una institución. Al utilizar herramientas digitales, se pueden automatizar procesos y reducir el tiempo de respuesta a las quejas, lo que a su vez mejora la satisfacción del paciente o usuario y aumenta la transparencia y la rendición de cuentas en la gestión pública de salud.</p>
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-4 d-flex justify-content-center flex-column mb-2">
+          <div class="border overflow-hidden" style="width: 100px; height: 130px; border-radius: 0%;">
+            <img src="{% static 'Autenticacion/login/img/263722.jpg' %}" alt="Foto 2" class="img-fluid w-100 h-100">
+          </div>
+          <div class="label-container">
+            <a class="email-label" >alaingalvez76@gmail.com</a>
+          </div>
+        </div>
+        <div class="col-12 col-md-4 d-flex justify-content-center flex-column mb-2">
+          <div class="border overflow-hidden" style="width: 100px; height: 130px; border-radius: 0%;">
+            <img src="{% static 'Autenticacion/login/img/85422.jpg' %}" alt="Foto 1" class="img-fluid w-100 h-100">
+          </div>
+          <div class="label-container">
+            <a class="email-label">n.alison.pedroso@gmail.com</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </div>
+</body>
+
+
+
+       {% endblock %}

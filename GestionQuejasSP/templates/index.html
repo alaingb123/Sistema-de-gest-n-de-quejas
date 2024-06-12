@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es" data-bs-theme="auto">
+{% load static %}
+ <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content=" Naomi Alison, Alain Galvez">
+
+    <title>Home</title>
+<!-- Incluir jQuery -->
+
+	<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+ <link rel="stylesheet" href="{% static 'Autenticacion/css/stylebase.css' %}">
+      <link rel="stylesheet" href="{% static 'Autenticacion/css/bootstrap.min.css' %}">
+   <link rel="stylesheet" href="{% static 'Autenticacion/js/jquery-3.3.1.min.js' %}">
+     <link rel="stylesheet" href="{% static 'Autenticacion/js/popper.min.js' %}">
+        <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/dashboard/">
+	</head>
+	<body style=" width: 100%;
+  max-width: 100vw;">
+	<section class="ftco-section">
+
+		<nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar" >
+	    <div class="container">
+	    	<a class="navbar-brand" href="index.html">AvanzaSalud</a>
+	    	<form action="#" class="searchform order-sm-start order-lg-last" >
+          <div class="form-group d-flex">
+
+           <div class="notification-button">
+  <a href="{% url 'ver_notificacion' %}">
+    <button class="nav-link px-2 py-1" style="background-color: rgba(33,37,41,0); width: 55px; height: 45px; margin-right: 10px; margin-bottom: 10px; border: none; position: relative;">
+      <img src="{% static 'Autenticacion/login/img/campana.png' %}" style="width: 100%; height: 100%;">
+      {% if cantidad_notificaciones_sin_leer > 0 %}
+        <span class="badge badge-pill badge-danger">{{ cantidad_notificaciones_sin_leer }}</span>
+      {% endif %}
+    </button>
+  </a>
+</div>
+
+      <div class="navbar-nav">
+    <div class="nav-item text-nowrap" style="right: 0">
+      <button class="nav-link px-3" onclick="confirmLogout()" style="background-color: rgba(33,37,41,0);width: 55px; height: 45px;font-size: 16px; color: #ffffff;border: none;">
+          <img src="{% static 'Autenticacion/login/img/cerrar-sesion.png' %}"  style="width: 100%; height: 100%;">
+      </button>
+    </div>
+  </div>
+
+
+          </div>
+        </form>
+	      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="fa fa-bars"></span> Menu
+	      </button>
+	      <div class="collapse navbar-collapse" id="ftco-nav">
+	        <ul class="navbar-nav m-auto">
+                 <li class="nav-item active">
+            <a class="nav-link {% if request.path == '/dash/' %}active{% endif %}" aria-current="page" href="{% url 'dash' %}"   style="color: white;font-weight: bold;" >
+              <span data-feather="home" class="align-text-bottom" ></span>
+              REGISTRO DE QUEJAS
+            </a>
+          </li>
+
+
+
+
+	        	<li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> GESTIONAR QUEJAS</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown04">
+              {% for group in user.groups.all %}
+          {% if  group.name == "Funcionario" %}
+              	<a class="nav-link {% if request.path == '/dash/insertar_queja/' %}active {% endif %}" href="{% url 'insertar_queja' %}"> Insertar Queja</a>
+                <a class="nav-link {% if request.path == '/dash/informe/' %}active {% endif %}" href="{% url 'informe' %}"> Gráfica de Quejas</a>
+                <a class="nav-link {% if request.path == '/quejasU/listar_quejaU/' %}active {% endif %} " href="{% url 'listar_quejasU' %}">Quejas de la Plataforma</a>
+   {% endif %}
+        {% endfor %}
+
+              {% for group in user.groups.all %}
+          {% if group.name == "JefeDep" %}
+              	<a class="nav-link {% if request.path == '/dash/insertar_respuesta/' %}active {% endif %}" href="{% url 'insertar_respuesta' %}"> Insertar Respuesta</a>
+              {% endif %}
+        {% endfor %}
+
+              </div>
+            </li>
+
+
+
+                {% for group in user.groups.all %}
+         {% if "Moderador" == group.name or  user.is_superuser %}
+
+	        	<li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> GESTIONAR USUARIO</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown04">
+              	<a class="nav-link {% if request.path == '/usuario/create/' %}active {% endif %}" href="{% url 'user_create' %}"> Insertar Usuario</a>
+                <a class="nav-link {% if request.path == '/usuario/' %}active {% endif %} " href="{% url 'user_list' %}"> Lista de Usuarios</a>
+              </div>
+            </li>
+
+             <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown04" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> GESTIONAR GRUPOS</a>
+              <div class="dropdown-menu" aria-labelledby="dropdown04">
+              	<a class="nav-link {% if request.path == '/usuario/grupoC/' %}active {% endif %} " href="{% url 'grupoC' %}"> Insertar Grupo</a>
+                <a class="nav-link {% if request.path == '/usuario/grupoL/' %}active {% endif %} " href="{% url 'grupoL' %}" > Listar Grupos</a>
+               <a class="nav-link {% if request.path == '/usuario/listas/' %}active {% endif %} "  href="{% url 'list_desp' %}" > Listas Desplegables</a>
+
+              </div>
+            </li>
+{% endif %}
+        {% endfor %}
+
+
+	        	<li class="nav-item {% if request.path == '/dash/acercaDe/' %}active {% endif %} "><a href="{% url 'acercaDe' %}" class="nav-link">ACERCA DE</a></li>
+	        	<li class="nav-item {% if request.path == '/usuario/cambiar-contrasena/' %}active {% endif %}"><a href="{% url 'change_password' %}" class="nav-link"> CAMBIAR CONTRASEÑA</a></li>
+	           {% if user.is_authenticated %}
+                <li class="nav-item"><a href="#" class="nav-link"> Bienvenido {{ user.username }}</a></li>
+            {% endif %}
+
+
+	        </ul>
+	      </div>
+	    </div>
+	  </nav>
+    <!-- END nav -->
+
+	</section>
+
+	 <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+	</body>
+</html>
+

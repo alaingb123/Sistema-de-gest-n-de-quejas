@@ -1,0 +1,33 @@
+ALAIN GALVEZ BORGES
+Desarrollador de Software
+Numero Telefonico : 59355668
+✉ : alaingalvez76@gmail.com
+Direccion : Pasaje Lopez #10 E/ Calle Ana Pegudo y Calle
+Final, Reparto Capiro, Santa Clara, Villa Clara.	Date of Birth : 05/19/2000
+Gender : Male
+Marital Status : Single
+Nationality : Cuba
+
+WORK  EXPERIENCE
+January 2020 - 
+January 2021	Especialista  En Atencion A  La Poblacion De Salud Publica
+Salud Publica 	 Santa Clara, Villa Clara
+Atender y tramitar quejas de la poblacion referente a la salud de diferentes vias.
+
+
+	EDUCATION		
+September 2019
+June 2024	Ciencias Informaticas  
+Bachelor Of Engineering	- UCI		La Lisa, La HaBana.
+
+
+		SKILLS		
+Django
+Mysql
+Python	
+Java
+Boostrap
+C++
+Odoo	
+
+

@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+
+
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+     #mi-tabla.table-striped thead {
+   background-image: linear-gradient(to left, rgba(84, 159, 39, 0.9), rgba(84, 159, 39, 0.75));
+color: white;
+}
+
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
+    </style>
+
+
+
+
+
+
+
+    <meta charset="UTF-8">
+
+<div class="container">
+  <div class="py-5 text-center" >
+    <img class="d-block mx-auto mb-4"  src="{% static 'Autenticacion/login/img/S.png' %}" alt="" width="200" height="150" >
+    <h2 style="color: #1e1f22">Lista de Grupos</h2>
+  </div>
+ <div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-striped" id="mi-tabla" style="color: #1e1f22;width: 600px;margin-left: 250px">
+  <thead class="table-striped thead">
+    <tr>
+      <th scope="col" style="border: 1px solid white;">Nombre</th>
+      <th scope="col" style="border: 1px solid white;">Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for group in groups %}
+    <tr>
+      <td style="border: 1px solid white;">{{ group.name }}</td>
+      <td style="border: 1px solid white;">
+        <div class="btn-group" role="group" style="">
+          <a href="{% url 'grupoE' group.pk %}" class="btn btn-primary" style="width: 110px;height: 30px;border-radius: 0;background-color: #529e26;border-color: #529d26;margin-right: 10px">Editar</a>
+          <a href="{% url 'confirmiar_eliminacion_grupo' group.pk %}" data-toggle="modal" data-target="#exampleModal" class="btn btn-danger" style="width: 110px;height: 30px; background-color: #444444;border-color:#444444;border-radius: 0 " >Eliminar</a>
+        </div>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="2">No se encontraron grupos.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Ventana modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="background-color: white">
+      <!-- Aquí se incluirá el contenido de la ventana modal -->
+      <div class="modal-header">
+         <h3 class="modal-title" id="exampleModalLabel" style="color: black;margin-top: 10px;margin-left:10px">Eliminar Grupo</h3>
+
+
+      </div>
+
+      <!-- Aquí se incluirá el contenido de la ventana modal -->
+      <div class="modal-body"></div>
+
+      <!-- Aquí se incluirá el contenido del pie de página de la ventana modal -->
+      <div class="modal-footer"></div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    // Al hacer clic en el enlace, se carga la vista y se muestra en la ventana modal
+    $('a[data-toggle="modal"]').on('click', function(e) {
+      e.preventDefault();
+      var target = $(this).data('target');
+      var url = $(this).attr('href');
+
+      $(target + ' .modal-body').load(url);
+      $(target).modal('show');
+    });
+  });
+
+</script>
+
+</div>
+ {% endblock %}

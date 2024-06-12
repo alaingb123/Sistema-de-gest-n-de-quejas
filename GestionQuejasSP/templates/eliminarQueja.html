@@ -1,0 +1,32 @@
+
+
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<div class="card">
+  <div class="card-header">
+    Eliminar Queja
+  </div>
+  <div class="card-body">
+    {% if queja and queja.respuesta %}
+      <p style="color:#000000;font-size: 20px; margin-top: 10px">La queja tiene una respuesta. {{ queja.respuesta.responsable }} debe eliminar la respuesta antes de eliminar la queja.</p>
+    {% else %}
+      <p style="color:#000000;font-size: 20px">¿Está seguro de que desea eliminar la queja {{ queja.numero }}? </p>
+    {% endif %}
+  </div>
+  <div class="card-footer">
+    <form method="POST" action="{% url 'eliminar_ultima_queja' pk=queja.pk %}">
+      {% csrf_token %}
+         {% if not queja.respuesta  %}
+      <button type="submit" class="btn btn-danger">Eliminar</button>
+        {% endif %}
+      <a href="{% url 'dash' %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+  </div>
+</div>
+
+
+{% endblock %}

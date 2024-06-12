@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+
+
+<link href="{% static  'css/insertar.css' %}" rel="stylesheet">
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: rgba(0, 0, 0, .1);
+        border: solid rgba(0, 0, 0, .15);
+        border-width: 1px 0;
+        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
+    </style>
+
+
+
+
+
+    <meta charset="UTF-8">
+
+<div class="container">
+  <div class="py-5 text-center" >
+      <img class="d-block mx-auto mb-4"  src="{% static 'Autenticacion/login/img/S.png' %}" alt="" width="200" height="150" >
+      <h2 style="color: #1e1f22">Editar Grupo</h2>
+    </div>
+
+<form method="post" class="form-horizontal">
+  {% csrf_token %}
+  <div class="form-group" style="margin-left: 30px">
+   <label  style="font-size: 17px;color: #1e1f22">Nombre del Grupo:</label>
+
+      <input type="text"  class="form-control" name="name" value="{{ group.name }}" maxlength="15" required="" id="id_name" style="background-color: transparent;width: 300px;
+border: 1px solid #1e1f22 ; color: #1e1f22">
+      <div class="form-group" style="margin-top: 20px">
+    <button type="submit" class="btn btn-primary" style="background-color: #529e26;border-color: #529d26">Guardar</button>
+    <a href="{% url 'grupoL' %}" class="btn btn-secondary">Cancelar</a>
+  </div>
+  </div>
+
+
+   <div class="col-md-6" style="color: #1e1f22;margin-left: 550px;margin-top: -160px;box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group" style="color: #1e1f22">
+              <label style="font-size: 17px; font-weight: bold;color: #1e1f22" >Permisos:</label>
+              {% for permission in form.permissions %}
+              {% if forloop.counter|divisibleby:2 %}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              {% endif %}
+              <div class="form-check form-check-inline">
+                {{ permission }}
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+</form>
+</div>
+
+
+     {% endblock %}

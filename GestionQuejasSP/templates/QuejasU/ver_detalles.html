@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <h1 class="mb-4" style="color: #1e1f22;margin-top: 30px">Ver queja</h1>
+      <hr class="mb-4">
+<div class="row" style="margin-right: 10px;margin-left: 10px">
+      <div class="queja-info mb-4" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);border-radius: 0; background-color: white;">
+        <p><strong>Número:</strong>{% if queja.queja_us %}{{ queja.queja_us.numero }}{% endif %}</p>
+        <p><strong>Nombre y Apellidos:</strong> {{ queja.nombre_apellidos }}</p>
+        <p><strong>Asunto:</strong> {{ queja.asunto }}</p>
+        <p><strong>Usuario:</strong> {{ queja.usuario.username }}</p>
+        <p><strong>Teléfono:</strong> {% if not queja.telefono == None %} {{ queja.telefono }} {% endif %}</p>
+        <p><strong>Dirección:</strong> {{ queja.direccion }}</p>
+        <p><strong>Fecha:</strong> {{ queja.created }}</p>
+       <button type="button" class="btn btn-primary" onclick="abrirVentana('{{ queja.argumento }}')" style="width: 150px;height: 40px;margin-top:10px;background-color: #4a9120;border-color: #4c9422;border-radius: 0">Ver argumento</button>
+
+          {% if queja.documentos.all %}
+  <p><strong>Archivos adjuntos:</strong>
+  <ul>
+    {% for documento in queja.documentos.all %}
+      <li>
+        <a href="{{ documento.archivo.url }}">{{ documento.archivo.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+      </div>
+
+
+
+      {% if queja.queja_us %}
+      <div class="queja-info mb-4" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);border-radius: 0; background-color: white;">
+        <h2 class="mb-4" style="color: #1e1f22">Registro de Queja</h2>
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Entidad afectada:</strong> {{ queja.queja_us.entidadAfectada }}</p>
+            <p><strong>Modalidad:</strong> {{ queja.queja_us.modalidad }}</p>
+            <p><strong>Vía:</strong> {{ queja.queja_us.via }}</p>
+            <p><strong>Procedencia:</strong> {{ queja.queja_us.procedencia }}</p>
+            <p><strong>Clasificación:</strong> {{ queja.queja_us.clasificacion }}</p>
+            <p><strong>Caso prensa:</strong> {{ queja.queja_us.casoPrensa }}</p>
+            <p><strong>Fecha de registro:</strong> {{ queja.queja_us.fechaR }}</p>
+            <p><strong>Fecha de término:</strong> {{ queja.queja_us.fechaT }}</p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+
+    {% if queja.queja_us.respuesta %}
+      <div class="queja-info mb-4" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);border-radius: 0; background-color: white;">
+        <h2 class="mb-4">Respuesta</h2>
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Responsable:</strong> {{ queja.queja_us.respuesta.responsable }}</p>
+            <p><strong>Conclusión:</strong> {{ queja.queja_us.respuesta.conclusion }}</p>
+            <p><strong>Fecha respuesta:</strong> {{ queja.queja_us.respuesta.created }}</p>
+            <a> <p><strong>Documento:</strong> {{ queja.queja_us.respuesta.documento }} </p> </a>
+              <p><strong>Entrega:</strong> {% if queja.queja_us.respuesta.entrega is True %} Entregada {% endif %}</p>
+              <p><strong>Satisfacción:</strong> {% if  queja.queja_us.respuesta.satisfaccion  %}{{ queja.queja_us.respuesta.satisfaccion }} {% endif %}</p>
+              <p><strong>Fecha de entrega:</strong> {% if queja.queja_us.respuesta.fechaE  %}{{ queja.queja_us.respuesta.fechaE }} {% endif %}</p>
+           <button type="button" class="btn btn-primary" onclick="abrirVentana('{{ queja.queja_us.respuesta.descripcion }}')" style="width: 150px;height: 40px;margin-top:10px;background-color: #4a9120;border-color: #4c9422;border-radius: 0">Ver respuesta</button>
+          </div>
+        </div>
+
+
+     <form action="{% url 'ver_detalles' numero=queja.pk %}" method="post">
+      {% csrf_token %}
+    {# Agregar los campos del formulario aquí #}
+    <div class="mb-3">
+
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" name="entrega" hidden checked>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="satisfaccion" class="form-label">Satisfacción:</label>
+        <select class="form-select" id="satisfaccion" name="satisfaccion" required style="background-color: rgba(255,255,255,0);color: #090404">
+            <option value="">Elegir...</option>
+            {% for enti in satisfaccion %}
+            <option value="{{ enti.id }}" {% if queja.queja_us.respuesta.satisfaccion == enti %} selected {% endif %} >{{ enti.nombre  }} </option>
+            {% endfor %}
+
+        </select>
+        <div class="invalid-feedback">
+            Por favor seleccione un dato válido.
+        </div>
+    </div>
+
+     <div class="mb-3">
+  <label for="fechaE" class="form-label" >Fecha Entrega</label>
+  <input type="date" class="form-control form-control-plaintext" id="fechaE" name="fechaE" value="{{ fecha_actual }}" readonly style="background-color: rgba(255,255,255,0);color: #000000">
+  <div class="invalid-feedback">
+    Por favor seleccione una fecha.
+  </div>
+</div>
+
+     {% if queja.queja_us.respuesta.entrega == False %}
+    <button type="submit" class="btn btn-primary" style="background-color: #4a9120;border-color: #4c9422;border-radius: 0">Enviar Conformidad</button>
+         {% endif %}
+</form>
+
+
+      </div>
+      {% endif %}
+
+
+    </div>
+  </div>
+</div>
+
+    <div class="queja-buttons mb-4" style="margin-right: 229px">
+        <a href="{% url 'listar_quejasU' %}" class="btn btn-secondary mr-2" style="margin-right: 50%;border-radius: 0">Volver</a>
+    {% for group in user.groups.all %}
+            {% if "Funcionario" == group.name %}
+          {% if not queja.queja_us %}
+        <a href="{% url 'insertar_quejaR' id=queja.pk %}" class="btn btn-primary" style="background-color: #4a9120;border-color: #4c9422;border-radius: 0">Registrar Queja</a>
+          {% endif %}
+    {% endif %}
+    {% endfor %}
+      </div>
+
+
+
+
+
+
+
+    <style>
+    .queja-info {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  padding: 16px;
+}
+
+.queja-info p {
+  margin-bottom: 8px;
+}
+
+.queja-info strong {
+  display: inline-block;
+  min-width: 120px;
+  font-weight: 600;
+  margin-right: 16px;
+}
+
+.queja-buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 767.98px) {
+  .queja-info strong {
+    min-width: auto;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+    </style>
+<script>
+  function abrirVentana(respuesta) {
+    var ventana = window.open('', '_blank', 'toolbar=0,location=0,menubar=0,width=600,height=400');
+    ventana.document.write('<html><head><title>Respuesta</title><style>body {background-color: #f0f0f0;} .respuesta {font-size: 16px; color: #333; background-color: #fff; padding: 20px; max-width: 90%; margin: 0 auto; word-wrap: break-word;}</style></head><body><div class="respuesta">' + respuesta + '</div></body></html>');
+    var ancho = ventana.innerWidth || ventana.document.documentElement.clientWidth || ventana.document.body.clientWidth;
+    var alto = ventana.innerHeight || ventana.document.documentElement.clientHeight || ventana.document.body.clientHeight;
+    var izquierda = (ventana.screen.width - ancho) / 2;
+    var arriba = (ventana.screen.height - alto) / 2;
+    ventana.resizeTo(600, 400);
+    ventana.moveTo(izquierda, arriba);
+    ventana.moveTo((screen.width - ventana.outerWidth) / 2, (screen.height - ventana.outerHeight) / 2);
+  }
+
+
+  function abrirVentana(argumento) {
+    var ventana = window.open('', '_blank', 'toolbar=0,location=0,menubar=0,width=600,height=400');
+    ventana.document.write('<html><head><title>Argumento</title><style>body {background-color: #f0f0f0;} .argumento {font-size: 16px; color: #333; background-color: #fff; padding: 20px; max-width: 90%; margin: 0 auto; word-wrap: break-word;}</style></head><body><div class="argumento">' + argumento + '</div></body></html>');
+    var ancho = ventana.innerWidth || ventana.document.documentElement.clientWidth || ventana.document.body.clientWidth;
+    var alto = ventana.innerHeight || ventana.document.documentElement.clientHeight || ventana.document.body.clientHeight;
+    var izquierda = (ventana.screen.width - ancho) / 2;
+    var arriba = (ventana.screen.height - alto) / 2;
+    ventana.resizeTo(600, 400);
+    ventana.moveTo(izquierda, arriba);
+    ventana.moveTo((screen.width - ventana.outerWidth) / 2, (screen.height - ventana.outerHeight) / 2);
+  }
+</script>
+{% endblock %}

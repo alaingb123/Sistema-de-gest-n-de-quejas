@@ -1,0 +1,20 @@
+<form method="POST" action="{% url 'edit_analisis' analisisqueja.id %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Guardar cambios</button>
+</form>
+
+
+
+<script>
+  // Obtén una referencia al botón de cancelar
+  var cancelarBtn = document.getElementById("cancelarBtn");
+
+  // Agrega un evento de clic al botón
+  cancelarBtn.addEventListener("click", function() {
+    // Cierra la ventana modal
+    var modal = document.getElementById("exampleModal");
+    var bootstrapModal = bootstrap.Modal.getInstance(modal);
+    bootstrapModal.hide();
+  });
+</script>

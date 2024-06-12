@@ -1,0 +1,181 @@
+
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+.
+
+<!-- Ventana modal para mostrar los mensajes -->
+<div class="modal fade" id="mensajeModal" tabindex="-1" role="dialog" aria-labelledby="mensajeModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="mensajeModalLabel">Mensajes</h5>
+        <button type="button" class="close" data-dismiss="modal" onclick="cerrarVentanaModal()" aria-label="Cerrar">
+
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% for message in messages %}
+          <div class="">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+      <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cerrarVentanaModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Script para activar la ventana modal al cargar la página si hay mensajes -->
+<script>
+  // Verificar si hay mensajes para mostrar
+  {% if messages %}
+    // Activar la ventana modal al cargar la página
+    $(document).ready(function(){
+      $('#mensajeModal').modal('show');
+    });
+  {% endif %}
+
+
+function cerrarVentanaModal() {
+    // Busca el elemento de la ventana modal por su ID
+    const modal = document.getElementById('mensajeModal');
+    // Cierra la ventana modal
+    $(modal).modal('hide');
+  }
+</script>
+
+
+<form method="POST"  class="mx-auto" style="max-width: 600px;marginn-left: 30px; margin-righ: 30px">
+    {% csrf_token %}
+{% if notificaciones %}
+    <div class="d-flex justify-content-center mb-3" >
+    <button type="submit" name="accion" value="eliminar" class="btn btn-danger" style="background-color: #549d27;border-color:#549d27; margin-right: 10px ;border-radius: 0;color: white">Eliminar seleccionadas</button>
+    <a  class="btn btn-danger" onclick="azuca()" style="background-color:#549d27;border-color:#549d27 ;border-radius: 0; color: white ">Eliminar todas</a>
+    </div>
+    {% else %}
+  <div class="alert alert-info text-center" role="alert" style="background-color: white; border-color: white">
+   <img class="d-block mx-auto mb-4"  src="{% static 'Autenticacion/login/img/S (1).png' %}" alt="" width="150" height="150" >
+
+        <h4 class="alert-heading">No tienes notificaciones en este momento.</h4>
+        <p>Por favor, revisa más tarde.</p>
+    </div>
+{% endif %}
+   {% for notificacion in page_obj %}
+     <div class="card mb-3">
+      <div class="card-body" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                <h5 class="card-title" style="font-size: large">{{ notificacion.mensaje }}</h5>
+                <p class="card-text"><small class="text-muted">{{ notificacion.fecha_creacion }}</small></p>
+                <input type="checkbox"  class="form-check-input" name="notificaciones[]" value="{{ notificacion.id }}" style="background-color: rgba(44,48,51,0);color: white;border-color: white">
+            </div>
+
+
+            <div class="card-footer"   style="background: linear-gradient(to right, rgba(83,156,38,0.57), rgba(34,154,20,0.58));color: white">
+
+
+              {% if notificacion.mensaje == 'Se ha recibido una nueva queja en la Plataforma Saldud' %}
+                  <a href="{% url 'ver_detalles' numero=notificacion.queja_id %}" class="btn btn-primary" style="background-color: #549d27;border-color: #549d27;border-radius: 0">Ver detalles</a>
+                  {% else  %}
+                    {% for group in user.groups.all %}
+          {% if group.name == "JefeDep" or group.name == "Funcionario" %}
+                <a href="{% url 'ver_queja' numero=notificacion.queja_id %}" class="btn btn-primary" style="background-color: #549d27;border-color: #549d27;border-radius: 0">Ver detalles</a>
+              {% endif %}
+                  {% endfor %}
+                  {% endif %}
+
+
+    {% if not request.user.groups.exists %}
+
+                    <a href="{% url 'ver_detalles2'  id=notificacion.queja_id %}"  class="btn btn-primary" style="background-color: #549c27;border-color: #549c27;border-radius: 0">Ver detalles</a>
+{% endif %}
+            </div>
+
+        </div>
+       <p>.</p>
+{% endfor %}
+
+
+
+</form>
+
+
+<!-- Mostrar enlaces a otras páginas -->
+{% if page_obj.has_other_pages %}
+    <nav aria-label="Navegación de página" style="margin-right: 250px">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1" aria-label="Primera" style="background-color: #2b2f32">
+                    <span aria-hidden="true"  style="background-color: white; color:  #2b2f32">&laquo;</span>
+                    <span class="sr-only"  style="background-color: white; color:  #2b2f32">Primera</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Anterior" style="background-color: #2b2f32">
+                    <span aria-hidden="true" style="background-color: white; color:  #2b2f32">&lsaquo;</span>
+                    <span class="sr-only" style="background-color:white; color: #2b2f32">Anterior</span>
+                </a>
+            </li>
+        {% endif %}
+
+        <li class="page-item disabled" style="background-color: white; color:  #2b2f32">
+            <span class="page-link" style="background-color: white; color:  #2b2f32">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}.
+            </span>
+        </li>
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Siguiente" style="background-color: white; color: #2b2f32">
+
+                    <span class="sr-only" style="background-color: white; color: #2b2f32">Siguiente</span>
+                <span aria-hidden="true" style="background-color: white; color: #2b2f32">&rsaquo;</span>
+                </a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Última" style="background-color: white; color:#2b2f32">
+                    <span aria-hidden="true" style="background-color: white; color:#2b2f32">&raquo;</span>
+                    <span class="sr-only" style="background-color: white; color: #2b2f32">Última</span>
+                </a>
+            </li>
+        {% endif %}
+    </ul>
+  </nav>
+{% endif %}
+
+    <div class="modal" id="eliminarModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">¿Está seguro que desea eliminar todas las notificaciones?</h4>
+
+      </div>
+      <div class="modal-body">
+        <p class="lead">Por favor, confirme si desea eliminar las notificaciones.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" onclick="window.location.href='{% url 'eliminar_todas_notificaciones' %}'" style="background-color: #0d7351;border-color: #0d7351;border-radius: 0" >Sí</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="document.getElementById('eliminarModal').style.display='none'" style="border-radius: 0">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function azuca() {
+    var modal = document.getElementById("eliminarModal");
+    modal.style.display = "block";
+}
+</script>
+
+
+<div style="height: 60px;">
+      <span style="display: inline-block; width: 20px; height: 20px; background-color: transparent;"></span>
+  </div>
+</div>
+{% endblock %}

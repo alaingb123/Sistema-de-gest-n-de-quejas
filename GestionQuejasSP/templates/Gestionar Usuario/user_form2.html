@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+     <style>
+
+input[type="checkbox"]:checked {
+  background-color: green !important;
+  border-color: green !important;
+  color: white !important;
+}
+
+
+    </style>
+
+
+
+    <div class="container py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="{% static 'Autenticacion/login/img/S.png' %}" alt="" width="200" height="150">
+        <h2 style="color: #1e1f22">Editar Usuario</h2>
+    </div>
+
+    {% if error_message %}
+        <div class="alert alert-danger" role="alert">
+            {{ error_message|safe }}
+        </div>
+    {% endif %}
+
+    <form id="editUserForm" method="POST" action="{{ request.path }}">
+        {% csrf_token %}
+       <div class="col-md-10 col-lg-8" style="position: absolute; left: 50%; transform: translateX(-50%); color: #1e1f22">
+    <div class="row">
+   <div class="col-sm-6 mb-3">
+            <label for="username" style="color:#1e1f22">Nombre de usuario:</label>
+            <input type="text" class="form-control" name="username"  maxlength="150" required="" id="username" value="{{ user.username }}" style="background-color: #ffffff;color: #1e1f22;border-radius: 0">
+        </div>
+         <div class="col-sm-6 mb-3">
+            <label for="email">Correo:</label>
+            <input type="email" class="form-control" name="email" maxlength="254" id="id_email" value="{{ user.email }}" style="background-color: #ffffff;color: #1e1f22;border-radius: 0">
+        </div>
+        <div class="col-sm-6 mb-3">
+            <label for="fullName">Nombre:</label>
+            <input type="text " class="form-control" name="first_name" maxlength="150" id="id_first_name"  value="{{  user.first_name }}" style="background-color: #ffffff;color: #1e1f22;border-radius: 0">
+        </div>
+      <div class="col-sm-6 mb-3">
+            <label for="fullName">Apellidos:</label>
+            <input type="text" class="form-control" name="last_name" maxlength="150" id="id_last_name" value="{{  user.last_name }}" style="background-color: #ffffff;color: #1e1f22;border-radius: 0">
+        </div>
+         <div class="col-12 col-lg-6 mb-3">
+            Activo
+            <input type="checkbox" name="is_active" id="id_is_active" value="{{ user.is_active }}" checked="">
+        </div>
+
+
+
+
+
+<style>
+    .btn-group-toggle .btn {
+        background-color: white;
+        color: #529d26;
+    }
+
+    .btn-group-toggle .btn.active {
+        background-color: #529d26;
+        color: white;
+    }
+</style>
+
+<div class="col-12 col-lg-6 mb-3">
+    <label for="groups">Grupo:</label>
+    <div class="btn-group-toggle" data-toggle="buttons">
+        {% for group in form.groups %}
+            <label class="btn btn-secondary">
+                {{ group }}
+            </label>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 10vh;">
+            <div style="position: absolute; left: 50%; transform: translateX(-50%);">
+                <button class="btn btn-primary btn-lg" type="submit" style="background-color: #529e26;border-color: #529d26;border-radius: 0;width: 200px;float:left; height: 48px;font-size: 15px;font-family: Arial; font-weight:bold;margin-right: 10px ">
+                    Actualizar
+                </button>
+                <a href="{% url 'dash' %}" class="btn btn-secondary mr-2" style="background-color: #444444;border-color:#444444 ;border-radius: 0;width: 200px;float:left; height: 48px;font-size: 1.25rem;margin-right: 20px">
+    Volver
+  </a>
+
+            </div>
+        </div>
+    </div>
+       </div>
+    </form>
+
+
+                    <div style="height: 20px;">
+      <span style="display: inline-block; width: 20px; height: 20px; background-color: transparent;"></span>
+  </div>
+{% endblock %}

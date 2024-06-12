@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+{% load static %}
+
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'Autenticacion/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'Autenticacion/css/owl.carousel.min.css' %}">
+<link rel="stylesheet" href="{% static 'Autenticacion/fonts/icomoon/style.css' %}">
+    <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{% static 'Autenticacion/css/bootstrap.min.css' %}">
+  <title>Login Page</title>
+  <!-- Bootstrap CSS -->
+
+  <!-- Custom CSS -->
+
+
+
+    <style>
+        #registroForm, #autenticacionForm {
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+
+</head>
+<body>
+
+
+
+ <div class="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 order-md-2">
+                    <img src="{% static 'Autenticacion/images/Diseño sin título (3).png' %}" alt="Image" class="img-fluid">
+                </div>
+                <div class="col-md-6 contents">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="mb-4">
+                                <h3>Bienvenido a <strong>Plataforma de ATPP de la DPS</strong></h3>
+                                <p class="mb-4">Plataforma para promover la participación activa de la comunidad en Villa Clara.</p>
+                            </div>
+{% if error_message %}
+                            <p class="mb-4" style="color: #e54e4e; font-weight: bold;">{{ error_message }}</p>
+                            {% endif %}
+                        {% if messages_s %}
+                            <p class="mb-4" style="color: #51dc0b; font-weight: bold;">{{ messages_s }}</p>
+                        {% endif %}
+
+
+
+ <div id="registroForm" style="display: none;">
+            <form method="post" action="{% url 'registro_user'  %}">
+                  {% csrf_token %}
+
+                 <div class="form-group first">
+                     <label for="username">Usuario</label>
+                     <input type="text" class="form-control" id="username" name="username" required>
+                 </div>
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group last mb-4">
+                    <label for="password1">Contraseña</label>
+                    <input type="password" class="form-control" id="password1" name="password1" required>
+                </div>
+                <div class="form-group last mb-4" id="confirmPasswordGroup" style="display: none;">
+                    <label for="password2">Confirmar contraseña</label>
+                    <input type="password" class="form-control" id="password2" name="password2" required>
+                </div>
+                <div class="d-flex mb-5 align-items-center">
+                    <label class="control control--checkbox mb-0"><span class="caption">Recuérdame</span>
+                        <input type="checkbox" checked="checked"/>
+                        <div class="control__indicator"></div>
+                    </label>
+                </div>
+                <button type="submit" value="Registrarse" class="btn text-white btn-block btn-primary" style="background-color:#55a428;border-color: #55a428 ">Registrarse</button>
+                <span class="d-block text-left my-4 text-muted">¿Ya tienes una cuenta? <a style="color:#55a428 " href="#" class="signUp-link" onclick="mostrarAutenticarse()">Autenticarse</a></span>
+            </form>
+ </div>
+
+
+
+       <div id="autenticacionForm">
+            <form method="post" action="{% url 'autenticacion'  %}">
+                {% csrf_token %}
+
+                <div class="form-group first">
+                    <label for="username">Usuario</label>
+                  <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+               <div class="form-group last mb-4">
+                   <label for="password">Contraseña</label>
+                  <input type="password" class="form-control" id="password" name="password" required>
+               </div>
+                    <div class="d-flex mb-5 align-items-center">
+                        <label class="control control--checkbox mb-0"><span class="caption">Recuérdame</span>
+                            <input type="checkbox" checked="checked"/>
+                            <div class="control__indicator"></div>
+                        </label>
+                        <span class="ml-auto"><a href="#" class="forgot-pass">¿Olvidaste tu contraseña?</a></span>
+                    </div>
+
+                <button type="submit" value="Iniciar Sesión" class="btn text-white btn-block btn-primary" style="background-color:#55a428;border-color: #55a428 ">Iniciar Sesión</button>
+                    <span class="d-block text-left my-4 text-muted">¿No estás registrado? <a style="color:#55a428 " href="#" class="signIn-link" onclick="mostrarRegistrarse()">Registrarse</a></span>
+
+            </form>
+        </div>
+ </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+ <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+
+  <!-- Custom JS -->
+<script>
+  function mostrarRegistrarse() {
+    document.getElementById('registroForm').style.display = 'block';
+    document.getElementById('autenticacionForm').style.display = 'none';
+    document.getElementById('confirmPasswordGroup').style.display = 'block';
+    document.getElementById('registroForm').classList.add('animacion-desplazamiento-abajo');
+    document.getElementById('autenticacionForm').classList.remove('animacion-desplazamiento-arriba');
+}
+
+function mostrarAutenticarse() {
+    document.getElementById('registroForm').style.display = 'none';
+    document.getElementById('autenticacionForm').style.display = 'block';
+    document.getElementById('confirmPasswordGroup').style.display = 'none';
+    document.getElementById('autenticacionForm').classList.add('animacion-desplazamiento-arriba');
+    document.getElementById('registroForm').classList.remove('animacion-desplazamiento-abajo');
+}
+
+
+
+    </script>
